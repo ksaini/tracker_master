@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+	 <script src="./js/jquery.min.js"></script>
+	<script src="./assets/js/bootstrap.min.js"></script>
+	
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+	<link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet" />
+	<link href="assets/css/demo.css" rel="stylesheet" />
+	
+	
+    <title>Add Dealer</title>
+	<style>
+	.row {
+		margin-right: 0px;
+		margin-left: 0px;
+		}
+	.container-fluid {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+	.col-lg-1,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-md-1,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-sm-1,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-xs-1,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.container-fluid>.navbar-collapse,
+.container-fluid>.navbar-header,
+.container>.navbar-collapse,
+.container>.navbar-header {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 5px
+}
+	</style>
+</head>
+
+<body >
+<form >
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="dashboard.html">GreyBox CLient</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="dashboard.html">&nbsp;Home</a></li>
+        <li class="dropdown">
+		  <a href="index.html" onclick="localStorage['eid']='';document.location='index.html'">&nbsp;&nbsp;Logout</a>
+        </li>
+        <!----<li><a href="#">&nbsp;&nbsp;View Agents </a></li>---->
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
+<div class="content" id='mainbody'>
+	<div class="container-fluid">
+		<ul class="nav nav-tabs">					
+			<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Basic Info</small></a></li>
+			<li><a data-toggle='tab' href='#two' style='color:black;'><small>Contacts</small></a></li>
+			<li><a data-toggle='tab' href='#three' style='color:black;'><small>Products</small></a></li>
+			<li><a data-toggle='tab' href='#four' style='color:black;'><small>Misc.</small></a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="panel panel-default tab-pane fade in active" id="one">
+				<div class="card">
+					<div class="panel-body">
+						<div class="row well">
+							<p class="title">Dealer Info</p>
+							<div class="content col-md-3 col-xs-6 ">
+								<label>Firm Name <sup style='color:red;font-weight: bold;'>*</sup></label><input  type='text' id="fname" required="true" autofocus><br>
+								<label>Address <sup style='color:red;font-weight: bold;'>*</sup></label><input  type='text' id="addr" required="true" ><br>
+								<label>GSTN</label><input  type='text' id="gstn" required="true" ><br>
+							</div>
+							<div id="map"></div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+	
+			<div class="panel panel-default tab-pane fade in" id="two">
+				<div class="card" style="padding: 5px 5px 10px 15px;">
+					<div class="panel-body">
+						<div class="row well well-sm">
+							<p class="title"><small>Contact Info</small></p>
+							<div class="content col-md-3 col-xs-8 ">
+								<label>Name <sup style='color:red;font-weight: bold;'>*</sup></label><input  type='text' id="name1" >
+								<label>Designation</label><input  type='text' id="des1" >
+								<label>(M) <sup style='color:red;font-weight: bold;'>*</sup></label><input  type='text' id="mob1"  >
+							</div>
+						</div>
+						<div class="row well well-sm">
+							<div class="content col-md-3 col-xs-8 ">
+								<label>Name</label><input  type='text' id="name2" >
+								<label>Designation</label><input  type='text' id="des2" >
+								<label>(M)</label><input  type='text' id="mob2"  >
+							</div>
+						</div>
+						<div class="row well well-sm">
+							<div class="content col-md-3 col-xs-8 ">
+								<label>Name</label><input  type='text' id="name3" >
+								<label>Designation</label><input  type='text' id="des3" >
+								<label>(M)</label><input  type='text' id="mob3"  >
+							</div>
+						</div>
+						<div class="row well well-sm">
+							<div class="content col-md-3 col-xs-8 ">
+								<label>Name</label><input  type='text' id="name4" >
+								<label>Designation</label><input  type='text' id="des4" >
+								<label>(M)</label><input  type='text' id="mob4"  >
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-default tab-pane fade in" id="three">
+				<div class="card" style="padding: 5px 5px 10px 15px;">
+					<div class="form-group row"></div>	
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<label for="ex1">Item Name<br>.</label><br>
+							
+						</div>
+						<div class="col-xs-3">
+							<label for="ex2">Monthly/<br>Turnover <br>(Qty)</label><br>
+							
+						</div>
+						<div class="col-xs-3">
+							<label for="ex3">Tentative<br>Price</label><br>
+							
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input class="form-control input-sm" id="it1" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="t1" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="tp1" type="text">
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input class="form-control input-sm" id="it2" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="t2" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="tp2" type="text">
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input class="form-control input-sm" id="it3" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="t3" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="tp3" type="text">
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input class="form-control input-sm" id="it4" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="t4" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="tp4" type="text">
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<input class="form-control input-sm" id="it5" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="t5" type="text">
+						</div>
+						<div class="col-xs-3">
+							<input class="form-control input-sm" id="tp5" type="text">
+						</div>
+					</div>
+                </div>
+            </div>
+			
+			<div class="panel panel-default tab-pane fade in " id="four">
+				<div class="card">
+					<div class="panel-body">
+						<div class="row well well-sm">
+							
+							<div class="content col-md-12 col-xs-12 ">
+								<label for="compete">Competetor Names</label>
+								<textarea class="form-control" rows="3" id="compete"></textarea>
+								
+							</div>
+						</div>
+						<div class="row well well-sm">
+							
+							<div class="content col-md-12 col-xs-12 ">
+								<label for="remarks">Special Remarks</label>
+								<textarea class="form-control" rows="4" id="remark"></textarea>
+							</div>
+						</div>
+						<div class="row ">
+							<button type='button'  class="btn" onClick="getLocation()">Save</button>
+						</div>
+						
+					</div>
+				</div>
+				
+		</div>			
+	</div>	
+</div>
+</form>	
+</body>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/dataTbl.js"></script>
+<script>
+
+
+</script>
+<script>
+function saveDealer(position)
+{
+		var firm = document.getElementById('fname').value;
+		var addr = document.getElementById('addr').value;
+		var gstn = document.getElementById('gstn').value;
+		
+		var contacts = {
+			details: []
+		};
+		
+		for(var i=1;i<=4;i++){
+			var name = document.getElementById('name' +i).value;
+			var dest = document.getElementById('des' +i).value;
+			var mob = document.getElementById('mob' + i).value;
+		
+			contacts.details.push({ 
+				"name" : name,
+				"designation"  : dest,
+				"mob"       : mob 
+			});
+		}
+		
+		var product = {
+			details: []
+		};
+		
+		for(var i=1;i<=5;i++){
+			var item = document.getElementById('it' +i).value;
+			var turnover = document.getElementById('t' +i).value;
+			var price = document.getElementById('tp' + i).value;
+		
+			product.details.push({ 
+				"item" : item,
+				"turnover"  : turnover,
+				"price"       : price 
+			});
+		}
+	
+	var remark = document.getElementById('remark').value;
+	var compete = document.getElementById('compete').value;
+	
+	
+	loc = [position.coords.latitude,position.coords.longitude];
+	
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+
+		if (req.readyState == 4 && req.status == 200) {
+			if(req.responseText.length < 15)
+				document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>New dealer created, id : "+req.responseText+"</small></p>"
+			else	
+				alert(req.responseText);
+		}
+	};
+	
+	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
+	var base_url = "http://theqalabs.com/track/";
+	
+	req.open("POST", base_url + "test.php");
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	
+	var sql = "firm='" + firm + "'&addr='" + addr + "'&gstn='" + gstn  + "'&contacts=" + JSON.stringify(contacts.details) + "&products=" + JSON.stringify(product.details) + "&lat=" + loc[0] + "&long=" + loc[1] + '&remark=' + remark + '&compete=' + compete + '&agentid=' + localStorage["sid"];
+	req.send(sql);
+	
+}
+</script>
+
+ <script>
+ 
+ function getLocation(){
+      navigator.geolocation.getCurrentPosition(saveDealer,onError);
+	  }
+	
+    function onError(error) {
+		loc = ["0","0"];		
+    }
+
+    </script>
+    
+</html>
