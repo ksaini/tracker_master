@@ -138,7 +138,20 @@
 	<div class="container-fluid">
 		
 		<div class="tab-content">
-			
+				
+				  <div class="row ">
+				  
+					<div class="content col-md-8 col-xs-8 " style="padding-left:5px;">
+						<select class="form-control text-muted input-sm" name='class'  id='agent'  style='font-size: 85%;padding-left:15px;'></select>
+					</div>
+					<div class="content col-md-3 col-xs-3 ">	
+						<button type='button' id="save"  class="btn-sm btn-positive pull-right" onClick="filert()">Filer</button>
+					</div>
+					<div class="content col-md-1 col-xs-1 ">	
+					</div>	
+				  </div>	
+				  <div class="row " style="padding-bottom:10px;"></div>
+				
 				<div class="card">
 				
 					<ul class="table-view" id='contactlist'>
@@ -200,7 +213,7 @@
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/dataTbl.js"></script>
 <script>
-
+getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
 getData('','','t_task_history01',0,0,102);
 </script>
  
