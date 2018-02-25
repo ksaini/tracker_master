@@ -145,7 +145,7 @@
 						<select class="form-control text-muted input-sm" name='class'  id='agent'  style='font-size: 85%;padding-left:15px;'></select>
 					</div>
 					<div class="content col-md-3 col-xs-3 ">	
-						<button type='button' id="save"  class="btn-sm btn-positive pull-right" onClick="filert()">Filer</button>
+						<button type='button' id="save"  class="btn-sm btn-positive pull-right" onClick="filter()">Filer</button>
 					</div>
 					<div class="content col-md-1 col-xs-1 ">	
 					</div>	
@@ -213,8 +213,16 @@
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/dataTbl.js"></script>
 <script>
-getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
+getDropDownData('agent','SELECT id,concat(name," (",id,")") as agent from t_agent_tbl ;');
 getData('','','t_task_history01',0,0,102);
+
+function filter(){
+e = document.getElementById("agent");
+var t = e.options[e.selectedIndex].value;
+document.getElementById('contactlist').innerHTML = "";
+getData('','','__!t_task_history02,' + t + '',0,0,102);
+
+}
 </script>
  
 </html>
