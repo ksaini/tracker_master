@@ -215,7 +215,7 @@
 <script>
 getDropDownData('agent','SELECT id,concat(name," (",id,")") as agent from t_agent_tbl ;');
 //getData('','','t_task_history01',0,0,102);
-taskList(0,10);
+taskList(0,0);
 function filter(){
 e = document.getElementById("agent");
 var t = e.options[e.selectedIndex].value;
