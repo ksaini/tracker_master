@@ -508,6 +508,7 @@ function taskList(agentid,start){
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			try {
+				var dataArray=JSON.parse(req.responseText);
 				custom(dataArray,102);
 			} catch (e) {
 				console.log("Exception::-"+e.toString());

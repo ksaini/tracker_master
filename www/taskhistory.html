@@ -145,7 +145,7 @@
 						<select class="form-control text-muted input-sm" name='class'  id='agent'  style='font-size: 85%;padding-left:15px;'></select>
 					</div>
 					<div class="content col-md-3 col-xs-3 ">	
-						<button type='button' id="save"  class="btn-sm btn-positive pull-right" onClick="filter()">Filter</button>
+						<button type='button' id="save"  class="btn-sm btn-positive pull-right" onClick="filter();">Filter</button>
 					</div>
 					<div class="content col-md-1 col-xs-1 ">	
 					</div>	
@@ -158,13 +158,14 @@
 						
 					</ul>
 					<div class="row ">
-							
+							<p onclick='loadMore();'>More..</p>
 						</div>
 				</div>	
 			
 			<script>
 				var ci=1;
 				function custom(data){
+				
 					var bgcolor = '';
 					
 					for(var i=0;i< data.length; i++){
@@ -190,6 +191,7 @@
 						
 					clist += "</div></li>";
 					
+					
 					document.getElementById('contactlist').innerHTML += clist;
 					
 										
@@ -213,15 +215,33 @@
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/dataTbl.js"></script>
 <script>
+var start = 0;
+var filtered =0;
 getDropDownData('agent','SELECT id,concat(name," (",id,")") as agent from t_agent_tbl ;');
 //getData('','','t_task_history01',0,0,102);
-taskList(0,0);
+taskList(0,start);
 function filter(){
+start = 0;
+
 e = document.getElementById("agent");
 var t = e.options[e.selectedIndex].value;
-document.getElementById('contactlist').innerHTML = "";
-getData('','','__!t_task_history02,' + t + '',0,0,102);
 
+document.getElementById('contactlist').innerHTML = "";
+//getData('','','__!t_task_history02,' + t + '',0,0,102);
+taskList(t,start);
+filtered =1;
+}
+
+function loadMore(){
+	start +=10;
+	if(filtered==1){
+		e = document.getElementById("agent");
+		var t = e.options[e.selectedIndex].value;
+		taskList(t,start);
+		}
+	else
+		taskList(0,start);
+	
 }
 </script>
  
