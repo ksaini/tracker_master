@@ -495,3 +495,28 @@ function endOfLastMonth(){
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
     return local.toJSON().slice(0,10);
 }
+
+function taskList(agentid,start){
+	 var sIndex = 0, offSet = 10, isPreviousEventComplete = true, isDataAvailable = true;
+	 var param = "";
+	 if(agentid==0)
+		 param = "start=" + start;
+	 else
+		param = "agentid=" + agentid + "&start=" + start;
+	
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			try {
+				custom(dataArray,102);
+			} catch (e) {
+				console.log("Exception::-"+e.toString());
+			}
+		}
+	};
+		
+	req.open("GET", base_url + "/listTask.php?" + param, true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send();
+    
+}
