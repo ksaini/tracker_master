@@ -93,6 +93,10 @@ function updateDom(data,tblId,tblHdrId,addRow,deleteRow, updatethead){
 			tbodyData += "<td width='5%' id='"+tblId+"_s"+i+"' onclick='sendFeeSMS(this.parentNode)' data-toggle='tooltip' title='Send SMS'><i class='fa fa-mobile' aria-hidden='true'></i></td>";
 			
 		}
+		else if(addRow==4){
+			tbodyData += "<td width='5%' id='"+tblId+"_"+i+"' onclick='addRow(this.parentNode)'><b class='glyphicon glyphicon-plus'></td>";
+			
+		}
 		if(deleteRow==1)
 			tbodyData += "<td width='5%' onclick='deleteRow(this.parentNode)'><b class='glyphicon glyphicon-minus'></td>";
 			

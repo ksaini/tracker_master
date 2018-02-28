@@ -21,7 +21,6 @@
 	 <script src="./js/jquery.min.js"></script>
 	<script src="./assets/js/bootstrap.min.js"></script>
 	
-	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
@@ -30,7 +29,7 @@
 	<link href="assets/css/demo.css" rel="stylesheet" />
 	
 	
-    <title>Add Product</title>
+    <title>Performance</title>
 	<style>
 	.row {
 		margin-right: 0px;
@@ -133,22 +132,41 @@
 
 <div class="content" id='mainbody'>
 	<div class="container-fluid">
-		<div class="card" >
-			<div class="row " id='graphic' >
-				<div class="content table-responsive table-full-width">
-				<table class="table-condensed table-hover table-striped sortable" key="" id="tableid1">
-				<caption>Products</caption>
-					<thead>
-					<tr id='thead1'>
-					<tr>
-					</thead>
-					<tbody id='table1' style='font-size:75%;'></tbody>
-					</table>		
-				</div>	
-			</div>
-		</div>				
-		</div>	
 		
+		<div class="tab-content">
+		<div class="card" >
+		<div class="panel-body">
+		<div class="tab-content" id='info' >
+		<ul class="nav nav-tabs" style='font-size: 85%;'>					
+			<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Dealer/Agent</small></a></li>
+			<li><a data-toggle='tab' href='#two' style='color:black;'><small>Orders</small></a></li>
+			<li><a data-toggle='tab' href='#three' style='color:black;'><small>Active Visit</small></a></li>
+							
+		</ul><br>
+			<div class="panel panel-default tab-pane fade in active" id="one">
+				<div class="row " id='graphic' >
+					<label><br>Dealer/Agent</label>
+						<div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+						
+				</div>
+			</div>
+			<div class="panel panel-default tab-pane fade in " id="two">
+				<div class="row " id='orders' >
+					<label><br>Orders/Agent: Sample</label>
+					<div id="orderPref" class="ct-chart ct-perfect-fourth"></div>		
+				</div>
+			</div>
+			<div class="panel panel-default tab-pane fade in " id="three">
+				<div class="row " id='orders' >
+					<label><br>Sample</label>
+					<div id="orderPref" class="ct-chart ct-perfect-fourth"></div>		
+				</div>
+			</div>
+	
+		</div>						
+		</div>	
+		</div>	
+		</div>
 	</div>	
 </div>
 </form>	
@@ -156,98 +174,55 @@
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/dataTbl.js"></script>
-
+<!--  Charts Plugin -->
+<script src="assets/js/chartist.min.js"></script>
 <script>
-function deleteRow(x){
-	//alert(x.cells[0].innerHTML);
-	postData("DELETE from t_item_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
-	location.reload();
-}
-function addRow(x){
-	var tableRef = x.parentNode;
-	var newRow   = tableRef.insertRow(tableRef.rows.length);
-	var newCell0  = newRow.insertCell(0);
-	
-	newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
-	var newCell  = newRow.insertCell(1);
-	var att = document.createAttribute("contenteditable");
-	att.value= "true";
-	newCell.setAttributeNode(att);
-	att = document.createAttribute("bgcolor");
-	att.value= '#faffbd';
-	newCell.setAttributeNode(att);
-	
-	var newText  = document.createTextNode('Product name');
-	newCell.appendChild(newText);
-	
-	var c2  = newRow.insertCell(2);
-	createFormattedCell(c2,'CODE',1);
-	
-	var c3  = newRow.insertCell(3);
-	createFormattedCell(c3,'',1);
-	
-	var c4  = newRow.insertCell(4);
-	createFormattedCell(c4,'',1);
-}
-
-function addProduct(tbl,colList,ele){
-	var val = "'"+ele.parentNode.parentNode.cells[1].innerHTML + "','" + ele.parentNode.parentNode.cells[2].innerHTML + "'";
-	    val = val + ",'" + ele.parentNode.parentNode.cells[3].innerHTML  + "','" + ele.parentNode.parentNode.cells[4].innerHTML + "'"
-	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
-	var req = new XMLHttpRequest();
-	req.onreadystatechange = function() {
-		if (req.readyState == 4 && req.status == 200) {
-			try {
-				//alert(req.responseText);
-				//alert("Added successfully");
-				location.reload();
-								
-			} catch (e) {
-				alert("Some errors have occured to add/update.");
-				console.log("Exception::-"+e.toString());
-			}
+getData('','',"t_perf01",0,0,102);
+//getData('','',"t_perf02",0,0,103);
+var s = [];
+var a = [];
+function custom(data,p){
+	var uniqueCount = [];
+	if(p==102){
+		for(var i=0;i< data.length; i++){
+			s.push(data[i]['dealer']);
+			a.push(data[i]['name']+ "(" + data[i]['dealer'] + ")");
 		}
-	};
+		drawChart1(s,a,'#chartPreferences');
+		
+	}	
+	else if(p==103){
+	    var a1=[];
+		var c1 = [];
+		for(var j=0;j< data.length; j++){
+			
+			uniqueCount.push(data[j]['agentid']);
+		}
+		var  count = {};
+    uniqueCount.forEach(function(x) { count[x] = (count[x]||0) + 1;});
 	
-
-	req.open("POST", base_url + "/dataInsert.php", true);
-	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	req.send(sql);
-	//location.reload();
-}
-
-
-function editRow(x){
-	setAttr(x.cells[1],"contenteditable","true");
-	setAttr(x.cells[1],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[3],"contenteditable","true");
-	setAttr(x.cells[3],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[4],"contenteditable","true");
-	setAttr(x.cells[4],"bgcolor","#faffbd");
-	
-	
-	var c3  = x.insertCell(8);
-	createFormattedCell(c3,"",1);
-	c3.innerHTML = "<button type='button' onclick=updateProduct(this)>Update</button>";
-	setAttr(c3,"contenteditable","false");
-	setAttr(c3,"bgcolor","");
-}
-
-function updateProduct(x){
-	var tableRef = x.parentNode.parentNode;
-	var prod = tableRef.cells[1].innerHTML;
-	var price = tableRef.cells[3].innerHTML;
-	var qty = tableRef.cells[4].innerHTML;
-	
-	var val = "'" + prod + "','" + price + "','" + qty + "'"; 
+		for (var key in count) {
+			
+			a1.push(key);
+			c1.push(count[key]);
+		}
+		//drawChart2(c1,a1,'#orderPref');
+	}
 }
 </script>
+<script>
+function drawChart1(s,a,target){
+new Chartist.Bar(target, {
+  labels: a,
+  series: s
+}, {
+  distributeSeries: true
+});
+}
 
+</script>
 
 <script>
-getData('table1','thead1','SELECT * from t_item_tbl ;',4,1,0);
 //getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
 </script>
     

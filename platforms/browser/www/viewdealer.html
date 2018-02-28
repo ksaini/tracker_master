@@ -21,6 +21,7 @@
 	 <script src="./js/jquery.min.js"></script>
 	<script src="./assets/js/bootstrap.min.js"></script>
 	
+	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
@@ -271,13 +272,16 @@ function custom(data){
 	var dhistory ="";
 	var ohistory ="";
 	var ordr;
+	var isAlert ="";
 	
 	for (var i = 0; i < data.length; i++) {
 		if(data[i]['discussion'].length==0)
 			data[i]['discussion'] = "--No notes!--";
-			
 		
-		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='font-size: 65%;'>"+data[i]['mdate']+"</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a></div></div>";
+		if(data[i]['d']> .5)
+		 isAlert = "<i class='fa fa-exclamation-triangle' style='font-size:14px;color:red'></i>" ;
+		
+		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='font-size: 65%;'>"+data[i]['mdate']+"</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
 		
 		
 		if(data[i]['ordr'].length>5){
@@ -339,6 +343,7 @@ function removeorder(ele){
 	var element = e;//document.getElementById("item1");
 	element.parentNode.removeChild(element);
 }
+
 
 //getDropDownData('order','SELECT id, concat(code,"-",name) as item from t_item_tbl ;');
 </script>

@@ -21,7 +21,6 @@
 	 <script src="./js/jquery.min.js"></script>
 	<script src="./assets/js/bootstrap.min.js"></script>
 	
-	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
@@ -30,7 +29,7 @@
 	<link href="assets/css/demo.css" rel="stylesheet" />
 	
 	
-    <title>Add Product</title>
+    <title>Add Agent</title>
 	<style>
 	.row {
 		margin-right: 0px;
@@ -137,7 +136,7 @@
 			<div class="row " id='graphic' >
 				<div class="content table-responsive table-full-width">
 				<table class="table-condensed table-hover table-striped sortable" key="" id="tableid1">
-				<caption>Products</caption>
+				<caption>Agents</caption>
 					<thead>
 					<tr id='thead1'>
 					<tr>
@@ -146,7 +145,7 @@
 					</table>		
 				</div>	
 			</div>
-		</div>				
+		</div>						
 		</div>	
 		
 	</div>	
@@ -160,7 +159,7 @@
 <script>
 function deleteRow(x){
 	//alert(x.cells[0].innerHTML);
-	postData("DELETE from t_item_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
+	postData("DELETE from t_agent_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
 	location.reload();
 }
 function addRow(x){
@@ -168,7 +167,7 @@ function addRow(x){
 	var newRow   = tableRef.insertRow(tableRef.rows.length);
 	var newCell0  = newRow.insertCell(0);
 	
-	newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
+	newCell0.innerHTML = "<button type='button' onclick=myFunction('t_agent_tbl','name,cn',this)>Add</button>";
 	var newCell  = newRow.insertCell(1);
 	var att = document.createAttribute("contenteditable");
 	att.value= "true";
@@ -177,22 +176,15 @@ function addRow(x){
 	att.value= '#faffbd';
 	newCell.setAttributeNode(att);
 	
-	var newText  = document.createTextNode('Product name');
+	var newText  = document.createTextNode('Agent name');
 	newCell.appendChild(newText);
 	
 	var c2  = newRow.insertCell(2);
-	createFormattedCell(c2,'CODE',1);
-	
-	var c3  = newRow.insertCell(3);
-	createFormattedCell(c3,'',1);
-	
-	var c4  = newRow.insertCell(4);
-	createFormattedCell(c4,'',1);
+	createFormattedCell(c2,'',1);
 }
 
-function addProduct(tbl,colList,ele){
+function myFunction(tbl,colList,ele){
 	var val = "'"+ele.parentNode.parentNode.cells[1].innerHTML + "','" + ele.parentNode.parentNode.cells[2].innerHTML + "'";
-	    val = val + ",'" + ele.parentNode.parentNode.cells[3].innerHTML  + "','" + ele.parentNode.parentNode.cells[4].innerHTML + "'"
 	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -215,39 +207,11 @@ function addProduct(tbl,colList,ele){
 	req.send(sql);
 	//location.reload();
 }
-
-
-function editRow(x){
-	setAttr(x.cells[1],"contenteditable","true");
-	setAttr(x.cells[1],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[3],"contenteditable","true");
-	setAttr(x.cells[3],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[4],"contenteditable","true");
-	setAttr(x.cells[4],"bgcolor","#faffbd");
-	
-	
-	var c3  = x.insertCell(8);
-	createFormattedCell(c3,"",1);
-	c3.innerHTML = "<button type='button' onclick=updateProduct(this)>Update</button>";
-	setAttr(c3,"contenteditable","false");
-	setAttr(c3,"bgcolor","");
-}
-
-function updateProduct(x){
-	var tableRef = x.parentNode.parentNode;
-	var prod = tableRef.cells[1].innerHTML;
-	var price = tableRef.cells[3].innerHTML;
-	var qty = tableRef.cells[4].innerHTML;
-	
-	var val = "'" + prod + "','" + price + "','" + qty + "'"; 
-}
 </script>
 
 
 <script>
-getData('table1','thead1','SELECT * from t_item_tbl ;',4,1,0);
+getData('table1','thead1','SELECT id,name,cn from t_agent_tbl ;',1,1,0);
 //getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
 </script>
     

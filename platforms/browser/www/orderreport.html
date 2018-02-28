@@ -30,7 +30,7 @@
 	<link href="assets/css/demo.css" rel="stylesheet" />
 	
 	
-    <title>Add Product</title>
+    <title>Order Report</title>
 	<style>
 	.row {
 		margin-right: 0px;
@@ -134,10 +134,24 @@
 <div class="content" id='mainbody'>
 	<div class="container-fluid">
 		<div class="card" >
+			<div class="row " >
+				<div class="content col-md-6 col-xs-6 ">
+					<label>From : </label>	<input type="date" name="from">
+				</div>
+				<div class="content col-md-6 col-xs-6 ">	
+					<label>Till : </label><input type="date" name="to">
+				</div>
+				
+			</div>
+			<div class="row " >
+				<button type="button" class='btn-sm btn-positive pull-right' style="height:25px;width:75px;" onclick="searchOrdr();">Search Order</button>
+				<br>
+				<br><br>
+			</div>
 			<div class="row " id='graphic' >
 				<div class="content table-responsive table-full-width">
-				<table class="table-condensed table-hover table-striped sortable" key="" id="tableid1">
-				<caption>Products</caption>
+				<table class="table-condensed table-hover table-striped sortable" style="padding-right:5px;" key="" id="tableid1">
+				<caption>Orders</caption>
 					<thead>
 					<tr id='thead1'>
 					<tr>
@@ -158,97 +172,50 @@
 <script type="text/javascript" src="js/dataTbl.js"></script>
 
 <script>
-function deleteRow(x){
-	//alert(x.cells[0].innerHTML);
-	postData("DELETE from t_item_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
-	location.reload();
-}
-function addRow(x){
-	var tableRef = x.parentNode;
-	var newRow   = tableRef.insertRow(tableRef.rows.length);
-	var newCell0  = newRow.insertCell(0);
-	
-	newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
-	var newCell  = newRow.insertCell(1);
-	var att = document.createAttribute("contenteditable");
-	att.value= "true";
-	newCell.setAttributeNode(att);
-	att = document.createAttribute("bgcolor");
-	att.value= '#faffbd';
-	newCell.setAttributeNode(att);
-	
-	var newText  = document.createTextNode('Product name');
-	newCell.appendChild(newText);
-	
-	var c2  = newRow.insertCell(2);
-	createFormattedCell(c2,'CODE',1);
-	
-	var c3  = newRow.insertCell(3);
-	createFormattedCell(c3,'',1);
-	
-	var c4  = newRow.insertCell(4);
-	createFormattedCell(c4,'',1);
-}
-
-function addProduct(tbl,colList,ele){
-	var val = "'"+ele.parentNode.parentNode.cells[1].innerHTML + "','" + ele.parentNode.parentNode.cells[2].innerHTML + "'";
-	    val = val + ",'" + ele.parentNode.parentNode.cells[3].innerHTML  + "','" + ele.parentNode.parentNode.cells[4].innerHTML + "'"
-	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
-	var req = new XMLHttpRequest();
-	req.onreadystatechange = function() {
-		if (req.readyState == 4 && req.status == 200) {
-			try {
-				//alert(req.responseText);
-				//alert("Added successfully");
-				location.reload();
-								
-			} catch (e) {
-				alert("Some errors have occured to add/update.");
-				console.log("Exception::-"+e.toString());
-			}
-		}
-	};
-	
-
-	req.open("POST", base_url + "/dataInsert.php", true);
-	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	req.send(sql);
-	//location.reload();
-}
-
-
-function editRow(x){
-	setAttr(x.cells[1],"contenteditable","true");
-	setAttr(x.cells[1],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[3],"contenteditable","true");
-	setAttr(x.cells[3],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[4],"contenteditable","true");
-	setAttr(x.cells[4],"bgcolor","#faffbd");
-	
-	
-	var c3  = x.insertCell(8);
-	createFormattedCell(c3,"",1);
-	c3.innerHTML = "<button type='button' onclick=updateProduct(this)>Update</button>";
-	setAttr(c3,"contenteditable","false");
-	setAttr(c3,"bgcolor","");
-}
-
-function updateProduct(x){
-	var tableRef = x.parentNode.parentNode;
-	var prod = tableRef.cells[1].innerHTML;
-	var price = tableRef.cells[3].innerHTML;
-	var qty = tableRef.cells[4].innerHTML;
-	
-	var val = "'" + prod + "','" + price + "','" + qty + "'"; 
-}
-</script>
-
-
-<script>
-getData('table1','thead1','SELECT * from t_item_tbl ;',4,1,0);
+getData('table1','thead1','SELECT did,ordr,mdate as date from t_meeting_tbl where LENGTH(ordr)>2 ;',0,0,102);
 //getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
+</script>
+<script>
+function custom(data){
+
+	var tblElement=document.getElementById('table1');
+	var tblHeadElement = document.getElementById('thead1');
+	var tbodyData="";
+	var theadData="";
+		
+	if(data.length >0){
+	
+		for(var key in data[0])	{
+			theadData += "<th><small>" + key + "</small></th>";
+		}
+		
+	}
+	
+	for (var i = 0; i < data.length; i++) {
+		tbodyData +="<tr>";
+		for(var key in data[i])	{
+			
+			if(key=='ordr'){
+				tbodyData += "<td width='50%'>";
+				var orders = JSON.parse(data[i][key]);
+				for(var k=0; k < orders.length;k++){
+					
+						tbodyData += "<b style='font-size:8px;color:blue;'>"+orders[k]['item']+ "</b><br><b style='font-size:6px;'>QTY:</b>" + orders[k]['qty'] + "<br><b style='font-size:6px;'>PRICE:</b>" + orders[k]['price'] + "<br><br>";
+				}	
+					
+				tbodyData += "</td >";
+			}
+			else
+				tbodyData += "<td >" + data[i][key] + "</td>";
+			
+		}
+			tbodyData +="</tr>";
+	}
+	
+	tblHeadElement.innerHTML=theadData;
+	tblElement.innerHTML=tbodyData;
+	
+}
 </script>
     
 </html>

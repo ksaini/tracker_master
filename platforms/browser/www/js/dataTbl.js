@@ -2,7 +2,7 @@ var dataArray=new Array();
 var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
-
+var base_url = "http://theqalabs.com/track/";
 
 
 function schoolDetails(data){
@@ -10,9 +10,6 @@ function schoolDetails(data){
 	address = data[0]['address'];
 	scn1 = data[0]['cn1'];
 	
-	//<script>setTimeout(function () {getData('','','school_details',0,0,9);}, 600);
-	//setTimeout(function () {alert(schoolname +  address);}, 300);
-	//</script>
 }
 function donothing(a,b){}
 
@@ -31,36 +28,14 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 				//alert(JSON.stringify(dataArray));
 				if(procFn ==0)
 					updateDom(dataArray,tblId,tblHdrId,addRow,deleteRow,1);
-				if(procFn==3)
-					updateAttendance(dataArray,tblId,tblHdrId);
-				if(procFn==2)
-					createLayout(dataArray,tblId,tblHdrId);
-				if(procFn==4)
-					schoolView(dataArray,tblId,tblHdrId);
-				if(procFn==5)
-					viewStudent(dataArray,tblId,tblHdrId);
-				if(procFn==6)
-					viewRoutes(dataArray,tblId,tblHdrId);
-				if(procFn==7)
-					verifyUsr(dataArray);
-				if(procFn==8)
-					holiday(dataArray);
-				if(procFn==9)
-					schoolDetails(dataArray);
 				if(procFn>100)
 					custom(dataArray,procFn);
-				
-								
-			} catch (e) {
-				if(procFn==7)
-					verifyUsr(dataArray); // if no result catch it here
-				
+									
+			} catch (e) {			
 				console.log("Exception::-"+e.toString());
 			}
 		}
 	};
-	
-	var base_url = "http://theqalabs.com/track/";//"http://localhost/pgexample/appSample/www";
 	
 	req.open("GET", base_url + "/dataTbl.php?" +  sql, true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -118,6 +93,10 @@ function updateDom(data,tblId,tblHdrId,addRow,deleteRow, updatethead){
 			tbodyData += "<td width='5%' id='"+tblId+"_s"+i+"' onclick='sendFeeSMS(this.parentNode)' data-toggle='tooltip' title='Send SMS'><i class='fa fa-mobile' aria-hidden='true'></i></td>";
 			
 		}
+		else if(addRow==4){
+			tbodyData += "<td width='5%' id='"+tblId+"_"+i+"' onclick='addRow(this.parentNode)'><b class='glyphicon glyphicon-plus'></td>";
+			
+		}
 		if(deleteRow==1)
 			tbodyData += "<td width='5%' onclick='deleteRow(this.parentNode)'><b class='glyphicon glyphicon-minus'></td>";
 			
@@ -148,9 +127,6 @@ function getDropDownData(ddId,q) {
 			}
 		}
 	};
-	
-	var base_url = "http://theqalabs.com/track/";
-	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("GET", base_url + "/dataTbl.php?" + sql, true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -488,24 +464,20 @@ function saveTblData(tbl,c,t,f){
 }
 
 function sendSMS(mobile,msg){
-	var param = "mobile="+ mobile + "&msg=" + msg;
+	var param = "msg=" + msg;
 	//alert(param);
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			try {
-				//document.getElementById('cn_'+mobile).innerHTML = 'Done';
-				smsCallback(req.responseText);
+				//smsCallback(req.responseText);
 			} catch (e) {
 				console.log("Exception::-"+e.toString());
 			}
 		}
 	};
-	
-	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
-	var base_url = "http://theqalabs.com/track/";
-	
-	req.open("POST", base_url + "/sms.php?" + param, true);
+		
+	req.open("GET", base_url + "/sms.php?" + param, true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	req.send();
 }
@@ -526,4 +498,30 @@ function endOfLastMonth(){
 		
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
     return local.toJSON().slice(0,10);
+}
+
+function taskList(agentid,start){
+	 var sIndex = 0, offSet = 10, isPreviousEventComplete = true, isDataAvailable = true;
+	 var param = "";
+	 if(agentid==0)
+		 param = "start=" + start;
+	 else
+		param = "agentid=" + agentid + "&start=" + start;
+	
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			try {
+				var dataArray=JSON.parse(req.responseText);
+				custom(dataArray,102);
+			} catch (e) {
+				console.log("Exception::-"+e.toString());
+			}
+		}
+	};
+		
+	req.open("GET", base_url + "/listTask.php?" + param, true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send();
+    
 }
