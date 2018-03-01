@@ -199,7 +199,7 @@ function searchOrdr(){
 var s = document.getElementById('from').value;
 var t = document.getElementById('to').value;
 
-//getData('table1','thead1','SELECT d.firmname,m.ordr,m.mdate as date from t_meeting_tbl m, t_dealer_tbl d where d.did=m.did and LENGTH(m.ordr)>2 and (m.mdate >="'+s+'" and t.mdate <= "'+t+'") ;',0,0,102);
+
 getData('table1','thead1','SELECT d.firmname,m.ordr,m.mdate as date from t_meeting_tbl m, t_dealer_tbl d where d.did=m.did and LENGTH(m.ordr)>2 and (m.mdate BETWEEN "'+s+'" and  "'+t+'") ;',0,0,102);
 }
 function custom(data){

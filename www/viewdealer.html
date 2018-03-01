@@ -256,7 +256,8 @@ function getDealer(){
 			document.getElementById('info').style.display = 'block' ;
 			document.getElementById('searchdiv').innerHTML=d;
 			
-			getData('','',"SELECT m.did,m.contact,m.discussion,m.ordr, m.nxtmeet,m.todo,m.d, m.mdate , d.firmname,d.addr from t_meeting_tbl m, t_dealer_tbl d where d.did=m.did and m.did=" + did + "  order by m.mdate desc;",0,0,102);
+						
+			getData('','','__!t_view_dealer02,' + did + '',0,0,102);
 			
 		}
 		
@@ -345,7 +346,6 @@ function removeorder(ele){
 }
 
 
-//getDropDownData('order','SELECT id, concat(code,"-",name) as item from t_item_tbl ;');
 </script>
  
 </html>
