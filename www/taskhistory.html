@@ -183,12 +183,12 @@
 						
 					var clist = "<li class='table-view-cell' style='padding-left:15px;padding-top:6;padding-bottom:6px; "+bgcolor+"' >";
 					clist += "<div class='row'><div class='content col-md-3 col-xs-7 '><p style='font-size:10px;' id='name"+ci+"'>"+data[i]['name']+"</p></div>";
-					clist += "<div class='content col-md-3 col-xs-5 '><p style='color:blue;text-align:right;font-size:11px;' ><small>Assigned:"+data[i]['dt']+"</small></p></div>";
+					clist += "<div class='content col-md-3 col-xs-5 '><p style='color:blue;text-align:right;font-size:11px;' ><small>Assigned:"+formatDate(data[i]['dt'])+"</small></p></div>";
 					//clist += "<p style='font-size:10px;color:red;text-align:right;' id='cdate"+ci+"'>"+tdate+"</p>";
 					clist += "<div class='content col-md-12 col-xs-12 '><p class='text-muted' style='font-size:11px;' >"+data[i]['task']+"</p></div>";
 					clist += "<div class='content col-md-3 col-xs-7 '><p class='text-muted' style='font-size:11px;color:blue;' >"+data[i]['comment']+"</p></div>";
 					if(data[i]['status'] <1)
-						clist += "<div class='content col-md-3 col-xs-5 '><p style='color:red;text-align:right;font-size:11px;' ><small>Closed On:"+data[i]['c_dt']+"</small></p></div>";
+						clist += "<div class='content col-md-3 col-xs-5 '><p style='color:red;text-align:right;font-size:11px;' ><small>Closed On:"+formatDate(data[i]['c_dt'])+"</small></p></div>";
 						
 					clist += "</div></li>";
 					

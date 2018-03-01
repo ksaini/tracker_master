@@ -525,3 +525,43 @@ function taskList(agentid,start){
 	req.send();
     
 }
+
+function formatDate(dt){
+	try{
+		var dateObj = new Date(dt);
+		var month = dateObj.getUTCMonth() + 1; //months from 1-12
+		var day = dateObj.getUTCDate();
+		var year = dateObj.getUTCFullYear();
+
+		newdate =  getM(month) + " " + day + ", " + year;
+		return newdate;
+	} catch(e){return dt;}
+}
+
+function getM(m){
+ if(m==1)
+ 	return "Jan";
+ else if(m==2)
+    return "Feb";
+ else if(m==3)
+    return "Mar"; 
+ else if(m==4)
+    return "Apr";  
+ else if(m==5)
+    return "May"; 
+ else if(m==6)
+    return "Jun";   
+ else if(m==7)
+    return "Jul"; 
+ else if(m==8)
+    return "Aug";  
+ else if(m==9)
+    return "Sep";  
+ else if(m==10)
+    return "Oct"; 
+ else if(m==11)
+    return "Nov";
+ else if(m==12)
+    return "Dec";     
+
+}

@@ -234,6 +234,8 @@ function custom(data){
 					
 				tbodyData += "</td >";
 			}
+			else if(key=='date')
+				tbodyData += "<td >" + formatDate(data[i][key]) + "</td>";
 			else
 				tbodyData += "<td >" + data[i][key] + "</td>";
 			

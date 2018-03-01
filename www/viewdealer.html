@@ -149,7 +149,7 @@
 							<div class="content col-md-10 col-xs-10 ">
 								<label>Select Dealer : </label><select class="form-control text-muted input-sm" name='class'  id='class'  style='font-size: 85%;'></select>
 							</div>
-							<div class="content col-md-2 col-xs-2 "><br><button type='button'  onClick="getDealer();return false">Go</button></div>
+							<div class="content col-md-2 col-xs-2 "><br><button type='button' class="btn-sm" onClick="getDealer();return false">Go</button></div>
 						</div>
 					<div class="tab-content" id='info' style='display:none;'>
 						<ul class="nav nav-tabs" style='font-size: 85%;'>					
@@ -282,14 +282,14 @@ function custom(data){
 		if(data[i]['d']> .5)
 		 isAlert = "<i class='fa fa-exclamation-triangle' style='font-size:14px;color:red'></i>" ;
 		
-		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='font-size: 65%;'>"+data[i]['mdate']+"</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
+		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='font-size: 65%;'>"+formatDate(data[i]['mdate'])+"</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
 		
 		
 		if(data[i]['ordr'].length>5){
 			var o = data[i]['ordr'];
 			ordr = JSON.parse(o);
 			
-			ohistory += "<div class='row' style=''><div class='row' style='background-color:#A3E4D7;margin-left:0px;margin-right:0px;'><div class='col-xs-3 text-muted' style='font-size: 75%;'>&nbsp;&nbsp;"+data[i]['mdate']+"</div><div class='col-xs-9 text-muted' ><label style='font-size: 10px;'>"+data[i]['firmname']+"</label></div></div>";
+			ohistory += "<div class='row' style=''><div class='row' style='background-color:#A3E4D7;margin-left:0px;margin-right:0px;'><div class='col-xs-3 text-muted' style='font-size: 75%;color:red;'>&nbsp;&nbsp;"+formatDate(data[i]['mdate'])+"</div><div class='col-xs-9 text-muted' ><label style='font-size: 10px;'>&nbsp;&nbsp;&nbsp;"+data[i]['firmname']+"</label></div></div>";
 			
 			ohistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-6 text-muted' style='font-size: 65%;'>ITEM</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>QTY</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>PRICE</label></div></div>";
 			
