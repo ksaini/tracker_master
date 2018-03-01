@@ -33,6 +33,7 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 									
 			} catch (e) {			
 				console.log("Exception::-"+e.toString());
+				errHndlr(req.responseText);
 			}
 		}
 	};
