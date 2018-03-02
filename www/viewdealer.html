@@ -292,7 +292,7 @@ function detailedview(ele,data){
 	var e = ele.parentNode.parentNode;
 	
 	var dview = "<div class='card' style='margin-bottom:10px;'>";
-	dview += "<div class='row ' style='background-color:#A3E4D7;margin-left:0px;margin-right:0px;' ><div class='col-xs-4 text-muted' style='background-color:#A3E4D7'><label style='font-size: 12px;'><b>&nbsp;&nbsp;&nbsp; "+data['mdate']+"</b></label></div><div class='col-xs-8 text-muted' style='font-size: 85%;text-transform:none;font=family:Museo Sans,sans-serif;'></div></div>";
+	dview += "<div class='row ' style='background-color:#A3E4D7;margin-left:0px;margin-right:0px;' ><div class='col-xs-4 text-muted' style='background-color:#A3E4D7'><label style='font-size: 12px;'><b>&nbsp;&nbsp;&nbsp; "+formatDate(data['mdate'])+"</b></label></div><div class='col-xs-8 text-muted' style='font-size: 85%;text-transform:none;font=family:Museo Sans,sans-serif;'></div></div>";
 	
 	dview += "<div class='row '><div class='col-xs-4 text-muted' style='font-size: 50%;'><label style='font-size: 10px;'> Contact :<b> "+data['contact']+"</b></label></div><div class='col-xs-8 text-muted' style='font-size: 85%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data['discussion']+"</div></div>";
 	dview += "<div class='row'><div class='col-xs-4 text-muted' style='font-size: 65%;'><label style='font-size: 10px;'> Next Meet :<br><font color='red'> "+data['nxtmeet']+"</font></label></div><div class='col-xs-8 text-muted' style='font-size: 10px;text-transform:none;font=family:Museo Sans,sans-serif;'> ToDo :<br> <font color='blue'>"+data['todo']+"</font></div></div>";
