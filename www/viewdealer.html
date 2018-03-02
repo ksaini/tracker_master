@@ -139,60 +139,37 @@
 
 <div class="content" id='mainbody'>
 	<div class="container-fluid">
-		
-		<div class="tab-content">
-			<!-----<div class="panel panel-default tab-pane fade in active" id="default">----->
-				<div class="card" >
-					<div class="panel-body">
-						
-						<div class="row " id='searchdiv' style='margin-left:1px;'>
-							<div class="content col-md-10 col-xs-10 ">
-								<label>Select Dealer : </label><select class="form-control text-muted input-sm" name='class'  id='class'  style='font-size: 85%;'></select>
-							</div>
-							<div class="content col-md-2 col-xs-2 "><br><button type='button' class="btn-sm" onClick="getDealer();return false">Go</button></div>
-						</div>
-					<div class="tab-content" id='info' style='display:none;'>
-						<ul class="nav nav-tabs" style='font-size: 85%;'>					
-							<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Discussions</small></a></li>
-							<li><a data-toggle='tab' href='#two' style='color:black;'><small>Orders</small></a></li>			
-						</ul><br>
-						<div class="panel panel-default tab-pane fade in active" id="one" style="border-style: none">
-						<div class="row " id='dhistory' style="line-height:1.4;margin-left:1px;">
-							
-						</div>
-						<div class="row " id='dview' style="line-height:1.4">
-							
-						</div>
-						</div>
-						
-						<div class="panel panel-default tab-pane fade in " id="two">
-							<!---<div class="card" style="padding: 5px 5px 10px 10px;">--->
-						
-					
-					<div class="form-group row" id = "ohistory">
-						
-					</div>
-					<div class="form-group row text-muted" id='newitem' style='font-size: 75%;'><br>
-					</div>
-					
-					
-                <!----</div>---->
-						</div>
-						
-						
-							
-							</div>
-						</div>
-						
-						
-					</div>
-					</div>
+		<div class="card" >
+			<div class="row " id='searchdiv' style='margin-left:1px;'>
+				<div class="content col-md-10 col-xs-10 ">
+					<label>Select Dealer : </label>
+					<select class="form-control text-muted input-sm" name='class'  id='class'  style='font-size: 85%;'></select>
 				</div>
-					
-			<!----</div>---->	
-	</div>	
+				<div class="content col-md-2 col-xs-2 "><br><button type='button' class="btn-sm " onClick="getDealer();return false">Go</button>
+				</div>
+			</div>
+			
+			<div class="tab-content" id='info' style='display:none;'>
+				<ul class="nav nav-tabs" style='font-size: 85%;'>					
+					<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Discussions</small></a></li>
+					<li><a data-toggle='tab' href='#two' style='color:black;'><small>Orders</small></a></li>			
+				</ul><br>
+				
+				<div class="panel panel-default tab-pane fade in active" id="one" style="border-style: none">
+					<div class="row " id='dhistory' style="line-height:1.4;margin-left:1px;"></div>
+					<div class="row " id='dview' style="line-height:1.4"></div>
+				</div>
+						
+				<div class="panel panel-default tab-pane fade in " id="two">
+					<div class="form-group row" id = "ohistory"></div>
+					<div class="form-group row text-muted" id='newitem' style='font-size: 75%;'><br></div>
+				</div>
+							
+			</div>
+		</div>
+	</div>
+</div>	
 </div>
-
 </body>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
@@ -282,7 +259,7 @@ function custom(data){
 		if(data[i]['d']> .5)
 		 isAlert = "<i class='fa fa-exclamation-triangle' style='font-size:14px;color:red'></i>" ;
 		
-		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='font-size: 65%;'>"+formatDate(data[i]['mdate'])+"</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
+		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='padding-left:10px;'><label style='font-size: 10px;'>"+formatDate(data[i]['mdate'])+"</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
 		
 		
 		if(data[i]['ordr'].length>5){
@@ -291,7 +268,7 @@ function custom(data){
 			
 			ohistory += "<div class='row' style=''><div class='row' style='background-color:#A3E4D7;margin-left:0px;margin-right:0px;'><div class='col-xs-3 text-muted' style='font-size: 75%;color:red;'>&nbsp;&nbsp;"+formatDate(data[i]['mdate'])+"</div><div class='col-xs-9 text-muted' ><label style='font-size: 10px;'>&nbsp;&nbsp;&nbsp;"+data[i]['firmname']+"</label></div></div>";
 			
-			ohistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-6 text-muted' style='font-size: 65%;'>ITEM</div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>QTY</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>PRICE</label></div></div>";
+			ohistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-6 text-muted' ><label style='font-size: 10px;'>ITEM</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>QTY</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>PRICE</label></div></div>";
 			
 			
 			for(var j=0;j < ordr.length; j++){

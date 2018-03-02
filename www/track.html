@@ -240,17 +240,23 @@
 					
 					}
 				});
-				//
-			}
-			else
-				p = new google.maps.LatLng(s_lat, s_long);
-		
-			var mapOptions = {
+				
+				var mapOptions = {
 				center: new google.maps.LatLng(s_lat, s_long),
 				zoom: 14,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
-						
+			}
+			else{
+					p = new google.maps.LatLng(s_lat, s_long);
+		
+					var mapOptions = {
+					center: new google.maps.LatLng(s_lat, s_long),
+					zoom: 4,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+					}
+				}
+				
 			map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		//	smarker.setMap(map);
 			
