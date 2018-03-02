@@ -259,7 +259,7 @@ function custom(data){
 		if(data[i]['d']> .5)
 		 isAlert = "<i class='fa fa-exclamation-triangle' style='font-size:14px;color:red'></i>" ;
 		
-		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='padding-left:10px;'><label style='font-size: 10px;'>"+formatDate(data[i]['mdate'])+"</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
+		dhistory += "<div class='row' style='margin-right:2px;margin-top:1px;margin-left:2px;'><div class='col-xs-2 text-muted' style='padding-left:10px;'><label style='font-size: 10px;'>"+formatDate(data[i]['mdate'])+"</label></div><div class='col-xs-3 text-muted' ><label style='font-size: 10px;'>"+data[i]['contact']+"</label></div><div class='col-xs-6 text-muted' style='font-size: 75%;text-transform:none;font=family:Museo Sans,sans-serif;padding-left:10px'>"+data[i]['discussion'].substring(0,100)+"<a href='' onclick='detailedview(this,"+JSON.stringify(data[i])+");return false;'>..details</a>"+ isAlert +"</div></div>";
 		
 		
 		if(data[i]['ordr'].length>5){
