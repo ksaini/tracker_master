@@ -2,7 +2,7 @@ var dataArray=new Array();
 var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
-var base_url = "http://theqalabs.com/track/";
+var base_url = "http://greyboxerp.com/track/";
 
 
 function schoolDetails(data){
@@ -250,7 +250,7 @@ function insertData(tbl,colList,valList,flg){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataInsert.php", true);
@@ -313,7 +313,7 @@ function postData(q,msg) {
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataTbl.php", true);
@@ -345,7 +345,7 @@ function postTblData(q,tblId,f){
 		}
 		};
 	
-		var base_url = "http://theqalabs.com/track/";
+		//var base_url = "http://theqalabs.com/track/";
 		//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 		req.open("POST", base_url + "/" +f, true);
@@ -431,7 +431,7 @@ function saveTblData(tbl,c,t,f){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/userLogin.php", true);
