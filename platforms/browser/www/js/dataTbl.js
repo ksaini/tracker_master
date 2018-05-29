@@ -33,6 +33,7 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 									
 			} catch (e) {			
 				console.log("Exception::-"+e.toString());
+				errHndlr(req.responseText);
 			}
 		}
 	};
@@ -249,7 +250,7 @@ function insertData(tbl,colList,valList,flg){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataInsert.php", true);
@@ -312,7 +313,7 @@ function postData(q,msg) {
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataTbl.php", true);
@@ -344,7 +345,7 @@ function postTblData(q,tblId,f){
 		}
 		};
 	
-		var base_url = "http://theqalabs.com/track/";
+		//var base_url = "http://theqalabs.com/track/";
 		//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 		req.open("POST", base_url + "/" +f, true);
@@ -430,7 +431,7 @@ function saveTblData(tbl,c,t,f){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/userLogin.php", true);
@@ -524,4 +525,44 @@ function taskList(agentid,start){
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	req.send();
     
+}
+
+function formatDate(dt){
+	try{
+		var dateObj = new Date(dt);
+		var month = dateObj.getUTCMonth() + 1; //months from 1-12
+		var day = dateObj.getUTCDate();
+		var year = dateObj.getUTCFullYear();
+
+		newdate =  getM(month) + " " + day + ", " + year;
+		return newdate;
+	} catch(e){return dt;}
+}
+
+function getM(m){
+ if(m==1)
+ 	return "Jan";
+ else if(m==2)
+    return "Feb";
+ else if(m==3)
+    return "Mar"; 
+ else if(m==4)
+    return "Apr";  
+ else if(m==5)
+    return "May"; 
+ else if(m==6)
+    return "Jun";   
+ else if(m==7)
+    return "Jul"; 
+ else if(m==8)
+    return "Aug";  
+ else if(m==9)
+    return "Sep";  
+ else if(m==10)
+    return "Oct"; 
+ else if(m==11)
+    return "Nov";
+ else if(m==12)
+    return "Dec";     
+
 }

@@ -136,22 +136,28 @@
 		<div class="card" >
 			<div class="row " >
 				<div class="content col-md-6 col-xs-6 ">
-					<label>From : </label>	<input type="date" name="from">
+					<label>From : </label><br>	<input type="date" id="from" class="text-muted" style="font-size:12px;">
 				</div>
 				<div class="content col-md-6 col-xs-6 ">	
-					<label>Till : </label><input type="date" name="to">
+					<label>Till : </label><br><input type="date" id="to" class="text-muted" style="font-size:12px;">
 				</div>
+				
 				
 			</div>
 			<div class="row " >
-				<button type="button" class='btn-sm btn-positive pull-right' style="height:25px;width:75px;" onclick="searchOrdr();">Search Order</button>
+				<div class="content col-md-8 col-xs-8 ">
+					
+				</div>
+				<div class="content col-md-4 col-xs-4 ">
+					<button type="button" class='btn-sm btn-positive pull-right' style="width:50%;height:50%;"  onclick="searchOrdr();"><i class="fa fa-search"></i></button>
+				</div>				
 				<br>
 				<br><br>
 			</div>
 			<div class="row " id='graphic' >
 				<div class="content table-responsive table-full-width">
-				<table class="table-condensed table-hover table-striped sortable" style="padding-right:5px;" key="" id="tableid1">
-				<caption>Orders</caption>
+				<table class="table-condensed table-hover table-striped sortable"  key="" id="tableid1">
+				<caption><small>Orders</small></caption>
 					<thead>
 					<tr id='thead1'>
 					<tr>
@@ -172,10 +178,30 @@
 <script type="text/javascript" src="js/dataTbl.js"></script>
 
 <script>
-getData('table1','thead1','SELECT did,ordr,mdate as date from t_meeting_tbl where LENGTH(ordr)>2 ;',0,0,102);
-//getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
+
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
+$(document).ready( function() {
+    $('#to').val(new Date().toDateInputValue());
+});
+$(document).ready( function() {
+	var today = new Date();
+    var newdate = new Date();
+    newdate.setDate(today.getDate()-1);
+    $('#from').val(newdate.toDateInputValue());
+});
 </script>
 <script>
+function searchOrdr(){
+var s = document.getElementById('from').value;
+var t = document.getElementById('to').value;
+
+
+getData('table1','thead1','SELECT d.firmname,m.ordr,m.mdate as date from t_meeting_tbl m, t_dealer_tbl d where d.did=m.did and LENGTH(m.ordr)>2 and (m.mdate BETWEEN "'+s+'" and  "'+t+'") ;',0,0,102);
+}
 function custom(data){
 
 	var tblElement=document.getElementById('table1');
@@ -186,7 +212,10 @@ function custom(data){
 	if(data.length >0){
 	
 		for(var key in data[0])	{
-			theadData += "<th><small>" + key + "</small></th>";
+			if(key=="firmname")
+				theadData += "<th><small>" + key + "<i class='fa fa-sort' onclick='sortDealer();'></i></small></th>";
+			else	
+			 theadData += "<th><small>" + key + "</small></th>";
 		}
 		
 	}
@@ -205,6 +234,8 @@ function custom(data){
 					
 				tbodyData += "</td >";
 			}
+			else if(key=='date')
+				tbodyData += "<td >" + formatDate(data[i][key]) + "</td>";
 			else
 				tbodyData += "<td >" + data[i][key] + "</td>";
 			
@@ -215,6 +246,41 @@ function custom(data){
 	tblHeadElement.innerHTML=theadData;
 	tblElement.innerHTML=tbodyData;
 	
+}
+
+function sortDealer() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("table1");
+  switching = true;
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      // Check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        // I so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
 }
 </script>
     
