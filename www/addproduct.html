@@ -194,20 +194,21 @@ letter-spacing: 0.5px !important;
 	color:#777;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 12px;
+	height:25px;
 }
 .prop
 {
 	width: 50%; 
 	float: right;
 	background-color:#FDE3A7;
-	height:15px;
+	height:25px;
 	padding-top:2px;
 }
 .prod{
 	width: 40%; 
 	float: left;	
 	background-color:#FDE3A7;
-	height:15px;
+	height:25px;
 	padding-top:2px;
 }
 .prodtitle{
@@ -222,7 +223,8 @@ letter-spacing: 0.5px !important;
 }
 .editable {
 	background-color:#faffbd;
-	height:15px;
+	height:25px;
+	padding-top:6px;
 }
 
 	</style>
@@ -290,7 +292,7 @@ function addRow(){
 			msg += "<div id='tmp2' class='col-xs-4 product editable' contenteditable=true>Product</div>";
 			msg += "<div id='tmp3' class='col-xs-2 product editable' contenteditable=true>0</div>";
 			msg += "<div id='tmp4' class='col-xs-1 product editable' contenteditable=true>Ton</div>";
-			msg += "<button class='col-xs-2 btn btn-sm select' style='padding-top:2px;padding-bottom:2px;' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Save</button>";			
+			msg += "<button class='col-xs-2 btn btn-sm select' style='padding-top:2px;padding-bottom:2px;' onclick=addProduct('t_item_tbl','code,name,dcode,dname,price,unit',this)>Save</button>";			
 			msg += "</div></li>";
 			chat = document.getElementById("chat");
 			chat.innerHTML = msg + chat.innerHTML;
@@ -298,6 +300,7 @@ function addRow(){
 
 function addProduct(tbl,colList,ele){
 	var val = "'"+document.getElementById("tmp1").innerHTML + "','" + document.getElementById("tmp2").innerHTML + "'";
+		val = val + "," + val;
 	    val = val + ",'" + document.getElementById("tmp3").innerHTML  + "','" + document.getElementById("tmp4").innerHTML + "'"
 	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
 	var req = new XMLHttpRequest();
