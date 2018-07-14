@@ -9,22 +9,16 @@ $username = $_SESSION["username"];
 $password = $_SESSION["password"];
 $dbname = $_SESSION["dbname"];
 
-$st_dt = $_GET['frm'];
-$end_dt = $_GET['to'];
+$stocks = json_decode($_GET['stocks']);
+$ids = json_decode($_GET['ids']);
 
-if(isset($_GET['agentid'])){
-	$agent = $_GET['agentid'];
-	$sql = "SELECT did,concat(firmname,', ',addr) as detail from t_dealer_tbl where agentid=$agent";
-}
-else if(isset($_GET['did'])){
-	$did = $_GET['did'];
-	//$sql = "SELECT did,firmname,addr from t_dealer_tbl where did=$did";
-        $sql = "SELECT d.did,d.firmname,d.addr, a.name as agent from t_dealer_tbl d, t_agent_tbl a where d.agentid=a.id and did=$did";
-}
-else if(isset($_GET['getall'])){
-	$sql = "SELECT id, name from t_agent_tbl;";
-}
+$isql = "";
 
+foreach($stocks as $stock){
+	$isql .= "UPDATE t_item_tbl set stock=$stock['stock'] where code = $stock['code'] ;";
+}
+echo $isql ;
+/*
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 // Check connection
 if (!$conn) {
@@ -44,5 +38,5 @@ if ($result->num_rows > 0) {
 
 mysqli_close($conn);
 echo json_encode($data );
-
+*/
 ?>

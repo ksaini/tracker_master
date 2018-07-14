@@ -105,12 +105,132 @@
     display: block;
     padding: 10px 5px
 }
+.card .content {
+    padding: 10px 10px 5px 5px; }
+	
+body {
+	text-transform:inherit;
+	
+}
+.chat
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li
+{
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 60px;
+	font-size:12px;
+}
+.chat-body1
+{
+	margin-left: 15px;
+	font-size:9px;
+}
+.chat li.right .chat-body
+{
+    margin-right: 60px;
+	font-size:12px;
+	
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+	width:100%;
+    color: #777777;
+}
+
+.panel .slidedown .glyphicon, .chat .glyphicon
+{
+    margin-right: 5px;
+}
+
+.panel-body
+{
+  #  overflow-y: scroll;
+	min-height: 530px;
+    height: 100%;
+}
+.product {
+font-size:11px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.code {
+font-size:11px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: #008489;
+letter-spacing: 0.5px !important;
+}
+
+.select {
+font-size:10px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: #E87E04;
+text-align:center;
+letter-spacing: 0.5px !important;
+}
+
+.info
+{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-bottom: 1px dotted #B3A9A9;
+	width:45%;
+	overflow: hidden;
+	background-color:#ffff;
+	color:#777;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 12px;
+}
+.prop
+{
+	width: 50%; 
+	float: right;
+	background-color:#FDE3A7;
+	height:15px;
+	padding-top:2px;
+}
+.prod{
+	width: 40%; 
+	float: left;	
+	background-color:#FDE3A7;
+	height:15px;
+	padding-top:2px;
+}
+.prodtitle{
+	width: 40%; 
+	float: left;	
+	
+	height:15px;
+	padding-top:2px;
+}
+.gbhide {
+	display:none;
+}
+.editable {
+	background-color:#faffbd;
+	height:15px;
+}
+
 	</style>
 </head>
 
 <body >
-<form >
-<nav class="navbar navbar-inverse">
+
+<nav class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom:5px;">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -118,40 +238,36 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">GreyBox Admin</a>
+      <a class="navbar-brand" href="index.html">Home</a>
+	   <p class="navbar-brand pull-right" href="" onclick=addRow();>+</p>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
+   <!--- <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="index.html">&nbsp;Home</a></li>
-        
-        <!----<li><a href="#">&nbsp;&nbsp;View Agents </a></li>---->
+        <li class="dropdown">
+		  <a href="index.html" onclick="localStorage['eid']='';localStorage.setItem('ordr', '');;document.location='index.html'">&nbsp;&nbsp;Logout</a>
+        </li>
       </ul>
       
-    </div>
+    </div>---->
   </div>
 </nav>
 
 <div class="content" id='mainbody'>
 	<div class="container-fluid">
-		<div class="card" >
-			<div class="row " id='graphic' >
-				<div class="content table-responsive table-full-width">
-				<table class="table-condensed table-hover table-striped sortable" key="" id="tableid1">
-				<caption>Products</caption>
-					<thead>
-					<tr id='thead1'>
-					<tr>
-					</thead>
-					<tbody id='table1' style='font-size:75%;'></tbody>
-					</table>		
-				</div>	
-			</div>
-		</div>				
+		<div class="panel panel-default">
+                <div class="panel-heading" id='phead' style='background:#265a88;color:white;text-align:center;padding-top:40px;padding-bottom:5px;'></div>
+				<div class="panel-body">
+                    <ul class="chat" id="chat">
+                                             
+                    </ul>
+				</div>
+			</div>			
 		</div>	
 		
 	</div>	
 </div>
-</form>	
+
 </body>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
@@ -163,36 +279,26 @@ function deleteRow(x){
 	postData("DELETE from t_item_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
 	location.reload();
 }
-function addRow(x){
-	var tableRef = x.parentNode;
-	var newRow   = tableRef.insertRow(tableRef.rows.length);
-	var newCell0  = newRow.insertCell(0);
+function addRow(){
 	
-	newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
-	var newCell  = newRow.insertCell(1);
-	var att = document.createAttribute("contenteditable");
-	att.value= "true";
-	newCell.setAttributeNode(att);
-	att = document.createAttribute("bgcolor");
-	att.value= '#faffbd';
-	newCell.setAttributeNode(att);
-	
-	var newText  = document.createTextNode('Product name');
-	newCell.appendChild(newText);
-	
-	var c2  = newRow.insertCell(2);
-	createFormattedCell(c2,'CODE',1);
-	
-	var c3  = newRow.insertCell(3);
-	createFormattedCell(c3,'',1);
-	
-	var c4  = newRow.insertCell(4);
-	createFormattedCell(c4,'',1);
+	var msg = "";
+	//newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
+	// add first row blank
+		msg += "<li id='m_0'   class='left clearfix' style='margin-top:5px;margin-left:-5px;margin-right:-12px; padding-top:10px;'>";
+			msg += "<div class='row'   style='margin-left:4px;margin-right:4px;'>";
+			msg += "<div id='tmp1' class='col-xs-3 code editable' contenteditable=true autofocus >CODE</div>";
+			msg += "<div id='tmp2' class='col-xs-4 product editable' contenteditable=true>Product</div>";
+			msg += "<div id='tmp3' class='col-xs-2 product editable' contenteditable=true>0</div>";
+			msg += "<div id='tmp4' class='col-xs-1 product editable' contenteditable=true>Ton</div>";
+			msg += "<button class='col-xs-2 btn btn-sm select' style='padding-top:2px;padding-bottom:2px;' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Save</button>";			
+			msg += "</div></li>";
+			chat = document.getElementById("chat");
+			chat.innerHTML = msg + chat.innerHTML;
 }
 
 function addProduct(tbl,colList,ele){
-	var val = "'"+ele.parentNode.parentNode.cells[1].innerHTML + "','" + ele.parentNode.parentNode.cells[2].innerHTML + "'";
-	    val = val + ",'" + ele.parentNode.parentNode.cells[3].innerHTML  + "','" + ele.parentNode.parentNode.cells[4].innerHTML + "'"
+	var val = "'"+document.getElementById("tmp1").innerHTML + "','" + document.getElementById("tmp2").innerHTML + "'";
+	    val = val + ",'" + document.getElementById("tmp3").innerHTML  + "','" + document.getElementById("tmp4").innerHTML + "'"
 	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -217,38 +323,150 @@ function addProduct(tbl,colList,ele){
 }
 
 
-function editRow(x){
-	setAttr(x.cells[1],"contenteditable","true");
-	setAttr(x.cells[1],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[3],"contenteditable","true");
-	setAttr(x.cells[3],"bgcolor","#faffbd");
-	
-	setAttr(x.cells[4],"contenteditable","true");
-	setAttr(x.cells[4],"bgcolor","#faffbd");
-	
-	
-	var c3  = x.insertCell(8);
-	createFormattedCell(c3,"",1);
-	c3.innerHTML = "<button type='button' onclick=updateProduct(this)>Update</button>";
-	setAttr(c3,"contenteditable","false");
-	setAttr(c3,"bgcolor","");
-}
-
-function updateProduct(x){
-	var tableRef = x.parentNode.parentNode;
-	var prod = tableRef.cells[1].innerHTML;
-	var price = tableRef.cells[3].innerHTML;
-	var qty = tableRef.cells[4].innerHTML;
-	
-	var val = "'" + prod + "','" + price + "','" + qty + "'"; 
-}
 </script>
 
 
 <script>
-getData('table1','thead1','SELECT * from t_item_tbl ;',4,1,0);
-//getDropDownData('agent','SELECT id,name from t_agent_tbl ;');
+getData('table1','thead1','SELECT id,name,code,price,unit,info from t_item_tbl ;',4,1,101);
+function custom(data,p){
+	if(p==101)
+		custom1(data);
+	else
+		custom2(data);
+}
+
+function custom(data){
+	var chat = document.getElementById("chat");
+	chat.innerHTML = "";
+		var msg = "";
+		var x = {};
+		var y  = new Array();
+		y.push(x);	
+				
+		for (var i = 0; i < data.length; i++) {
+			var id = data[i]['id'] ;
+			var info = data[i]['info'] ;			
+			
+			msg += "<li id='m_"+id+"'   class='left clearfix' style='margin-top:5px;margin-left:-5px;margin-right:-12px; padding-top:10px;'>";
+			msg += "<div class='row' onclick=showPrdDetails("+id+") style='margin-left:4px;margin-right:4px;'>";
+			msg += "<div class='col-xs-3 code' >" + data[i]['code'] + "</div>";
+			msg += "<div class='col-xs-4 product' >" + data[i]['name'] + "</div>";
+			msg += "<div class='col-xs-2 product' >" + data[i]['price'] + "</div>";
+			msg += "<div class='col-xs-1 product' >" + data[i]['unit'] + "</div>";
+			msg += "<div class='col-xs-2 details' style='text-align:center;' ><i class='fa fa-edit' style='font-size:12px;color:red;'></i></div>";
+			//msg += "<div class='col-xs-2 select' id='sel_"+data[i]['id']+"' onclick=selectIt("+data[i]['id']+")>Select</div>";
+			msg += "</div>";
+			
+			if(info==null)	
+				info = JSON.stringify(y);
+			
+			msg += prdDetails(id,info);	
+				
+			msg += "</li>";
+		}
+		chat.innerHTML = msg;	
+}
+
+function prdDetails(id,info){
+	
+	try	{ info =JSON.parse(info);} catch (e) {}
+	
+	var msg = "";
+	msg += '<div class=" clearfix to-left gbhide" name="prd" id="prdetail_'+id+'" >';
+    msg +='    <div class=" code row" style="padding-top:20px;text-align:left;"><u>PRODUCT PROPERTIES</u>&nbsp;&nbsp;<i class="fa fa-angle-up" style="font-size:16px" onclick=foldup('+id+')></i></div><br>';
+	msg += "<div class='info'>";
+	msg += "<div  class = 'prodtitle' >PRO</div>";
+	msg += "<div  class='prodtitle'>VALUE</div>";
+	msg += "</div>";
+    msg +='    <div class="row " id="pinfo'+id+'">';
+	for (var i=0; i < info.length; i++){
+		for(var k in info[i]){
+			msg +=showProperties(id,k,info[i][k]);}
+	}
+	msg += '</div><br>';
+	msg += "<button class='btn btn-sm select' style='padding-top:2px;padding-bottom:2px;border-width:1px;' onclick=addProperties("+id+",'','')>Add Property</button>&nbsp;&nbsp;"
+	msg += "<button class='btn btn-sm select' style='padding-top:2px;padding-bottom:2px;border-width:1px;' onclick='save("+id+")'>Save</button>";
+	
+	//li.innerHTML += msg;	
+	return msg;
+}
+
+function showPrdDetails(id){
+	event.stopPropagation();
+	var lis = document.getElementsByName("prd");
+	for(var i=0; i < lis.length;i++)
+		lis[i].classList.add('gbhide');
+	
+	try{
+	document.getElementById('prdetail_'+ id).classList.remove('gbhide');} catch (e) {}
+	
+}
+
+function foldup(id){
+	document.getElementById("prdetail_" + id).classList.add('gbhide');
+}
+
+var item = 0;
+function addProperties(id,k,v){
+	event.stopPropagation();
+	item++;
+	var pinfo = document.getElementById("pinfo" + id);
+	var txt = "";	
+	txt += "<div class='info'>";
+	txt += "<div id=key_" + item + " name='product"+id+"' contenteditable='true' class = 'prod' >"+k+"</div>";
+	txt += "<div id=val_" + item + " name='attr"+id+"' contenteditable='true' class='prop'>"+v+"</div>";
+	txt += "</div>";
+	
+	pinfo.innerHTML += txt;
+	event.stopPropagation();
+    return false;
+}
+function showProperties(id,k,v){
+	event.stopPropagation();
+	item++;
+	//var pinfo = document.getElementById("pinfo" + id);
+	var txt = "";	
+	txt += "<div class='info'>";
+	txt += "<div id=key_" + item + " name='product"+id+"' contenteditable='true' class = 'prod' >"+k+"</div>";
+	txt += "<div id=val_" + item +  " name='attr"+id+"' contenteditable='true' class='prop'>"+v+"</div>";
+	txt += "</div>";
+	
+	//pinfo.innerHTML += txt;
+	event.stopPropagation();
+    return txt;
+}	
+
+function save(id){
+	// Here we will scan through all product attributes and their value
+	// Store them as JSON and then save them to column = 'info' in the product
+	
+	// Get all divs with name = 'product' and name='attr'
+	var p = document.getElementsByName('product'+ id);
+	var a = document.getElementsByName('attr'+ id);
+	var temp_info = {};
+	var inf = new Array();
+	
+	for(var i=0; i < p.length; i++){
+		if(a[i].innerHTML.trim().length > 0){
+			temp_info[p[i].innerHTML] = a[i].innerHTML;
+			
+			}
+	}
+	
+	inf.push(temp_info);	
+	info = JSON.stringify(inf);
+	//alert(info);
+	// Save info to column = 'info' in Product table
+	// Need not to save it as local storage. 
+	// DELETE this line Once you save it to DB
+	//localStorage["info"] = info;
+	
+	//location.reload();
+	getData('table1','thead1','UPDATE t_item_tbl set info=\''+info+'\' where id='+id+' ;',4,1,102);
+	
+}
+function custom2(data){location.reload();}
+function errHndlr(){location.reload();}
 </script>
     
 </html>
