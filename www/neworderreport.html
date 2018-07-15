@@ -399,6 +399,11 @@ function getOH(data){
 	}
 }
 
+function editOrder(id,data){
+	localStorage["editOrdr"] = data;
+	window.location.href = "editOrder.html?id=" + id;
+}
+
 function populateByDealer(data){
 	getAllOrdr(data);
 	var chat = document.getElementById("chat");
@@ -410,7 +415,7 @@ function populateByDealer(data){
 			
 			if(data[i]['ordr'].trim().length > 2 && data[i]['status']== 0){flg=1;
 			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' ><span class='chat-img pull-left' style='font-size:14px;color:green;'>";
-			msg += formatDateY(data[i]['mdate']) + "<br><span style='font-size:12px;color:black;'><i id='users' class='fa fa-trash' style='color:#D64541;'></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i id='users' class='fa fa-edit'></i></span></span>";
+			msg += formatDateY(data[i]['mdate']) + "<br><span style='font-size:12px;color:black;'><i id='users' class='fa fa-trash' style='color:#D64541;'></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i id='users' class='fa fa-edit' onclick='editOrder("+data[i]['id']+","+JSON.stringify(data[i])+");'></i></span></span>";
 			
 			msg += "<div class='chat-body clearfix'>";
 			msg += "<span class='text-muted col-xs-9' style='font-size:10px;'><strong class='primary-font' style='font-size:10px;padding-bottom:8px;text-transform: uppercase;'>"+ data[i]['firmname'] +  "</strong><span class='pull-right'>Stock</span><span class='pull-right'>Ordr&nbsp;&nbsp;</span>";
