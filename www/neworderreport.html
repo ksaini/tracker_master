@@ -31,6 +31,27 @@ font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neu
 color: #008489;
 letter-spacing: 0.5px !important;
 }
+
+.productval
+{
+border-bottom: 1px solid #BDC3C7;
+border-right: 1px solid #BDC3C7;
+padding-left:5px;
+font-weight:100;
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.order {
+	font-weight: 300 !important;
+	color: #484848 !important;
+	border-color: #D35400;
+	color: #D35400;
+	width:22%;
+	padding-top:2px;
+	padding-bottom:2px;	
+}
 </style>
 <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <title>View Order Details</title>
@@ -431,19 +452,6 @@ function populateProcessing(data){
 				
 				msg += "</li>";
 			
-			/*
-			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' ><span class='chat-img pull-left' style='font-size:14px;color:green;'>";
-			msg += formatDateY(data[i]['mdate']) + "<br><span style='font-size:12px;color:black;'>&nbsp;<i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></span>";
-			
-			msg += "<div class='chat-body clearfix'>";
-			msg += "<span class='text-muted col-xs-9' style='font-size:10px;'><strong class='primary-font' style='font-size:10px;padding-bottom:8px;text-transform: uppercase;'>"+ data[i]['firmname'] + "</strong><span class='pull-right'>Stock</span><span class='pull-right'>Ordr&nbsp;&nbsp;</span>";
-			
-			msg += "<br>" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</span>" ;
-			
-			msg +=  "<span class='chat-img text-muted pull-right text-muted col-xs-3' style='padding-right:10px;padding-left:10px;font-size:14px;' >"+'<br><button id="'+data[i]['id']+'" class="btn btn-warning btn-sm  allocate" style="height:25px;padding-bottom:10px;font-size:12px;"  onclick="">Allocate</button>'+"<br><br></span>";
-			
-			msg += "</div></li>";
-			*/
 			}
 			
 		}
@@ -714,7 +722,7 @@ function dispatch(ele){
 	unReserveIt(id,"RSV2DISP");
 }
 function dispatched(){
-	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,110);
+	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, m.dispatch_details, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,110);
 }
 function showDispatch(data){
 document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
@@ -734,8 +742,57 @@ document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
 			
 			msg += "<br>" + displayOrdr1(JSON.parse(data[i]['ordr'])) + "</span>" ;
 			msg += "&nbsp;&nbsp;";
+			msg += "</div><br>"+ordrHistory(data[i]['id'])+"<br><br>";
 			
-			msg += "</div>"+ordrHistory(data[i]['id'])+"</li>";
+			// dispatch details to be filled by operator
+			var name = "invc_d"+data[i]['id'];	
+			if(data[i]['dispatch_details']!=null && data[i]['dispatch_details'].trim().length>2){
+				//alert(data[i]['dispatch_details']);
+				var obj = JSON.parse(data[i]['dispatch_details']);
+				
+				
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;margin-top:30px;'>";
+				msg += "<div class='col-xs-4 code' >INVOICE NAME</div>";
+				msg += "<div class='col-xs-4 code' >INVOICE DATE</div>";
+				msg += "<div class='col-xs-4 code' >GR NO.</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["invoice"] +"</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["invoicedt"] +"</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["gr"] +"</div>";
+				msg += "</div>";
+				
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;'>";
+				msg += "<div class='col-xs-4 code' >TRUCK NO.</div>";
+				msg += "<div class='col-xs-4 code' >FREIGHT</div>";
+				msg += "<div class='col-xs-4 code' >DRIVER NO.</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["truck"] +"</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["freight"] +"</div>";
+				msg += "<div class='col-xs-4 product' name='"+name+"' contenteditable=true>"+ obj["driver"] +"</div>";
+				msg += "</div>";
+				
+			}else{
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;margin-top:30px;'>";
+				msg += "<div class='col-xs-4 code' >INVOICE NAME</div>";
+				msg += "<div class='col-xs-4 code' >INVOICE DATE</div>";
+				msg += "<div class='col-xs-4 code' >GR NO.</div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "</div>";
+				
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;'>";
+				msg += "<div class='col-xs-4 code' >TRUCK NO.</div>";
+				msg += "<div class='col-xs-4 code' >FREIGHT</div>";
+				msg += "<div class='col-xs-4 code' >DRIVER NO.</div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
+				msg += "</div>";
+			}
+			msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;'>";
+			msg += "<button id='disp_details"+data[i]['id']+"' class='btn btn-sm pull-right order' onclick='savedd("+data[i]['id']+");'>save</button>";
+			msg += "</div>";
+			
+			msg += "</li>";
 			}
 			
 		}
@@ -755,6 +812,21 @@ function ordrHistory(id){
 	msg += "<div class='chat-body1 clearfix text-muted col-xs-12 timeline-horizontal'><span class='oh_tl col-xs-3'><i class='fa fa-check-circle' style='color:green'></i></span><span class='oh_tl col-xs-3'><i class='fa fa-check-circle' style='color:green'></i></span><span class='oh_tl col-xs-3'><i class='fa fa-check-circle' style='color:green'></i></span><span class='oh_tl_last col-xs-3'><i class='fa fa-check-circle' style='color:green'></i></span></div>";
 	 msg += 	"<div class='chat-body1 clearfix text-muted col-xs-12'><span class='oh col-xs-3'>" +formatDateY(ordr_history[id][0]) + "</span><span class='oh col-xs-3'>" + formatDateY(ordr_history[id][1]) + "</span><span class='oh col-xs-3'>" + formatDateY(ordr_history[id][2]) + "</span><span class='oh col-xs-3'>" + formatDateY(ordr_history[id][3]) + "</span></div>";
 		return msg;
+}
+
+function savedd(id){
+	var name = "invc_d"+id;
+	var eles = document.getElementsByName(name);
+	var jsn = {};
+	
+	jsn['invoice'] = eles[0].innerHTML;
+	jsn['invoicedt'] = eles[1].innerHTML;
+	jsn['gr'] = eles[2].innerHTML;
+	jsn['truck'] = eles[3].innerHTML;
+	jsn['freight'] = eles[4].innerHTML;
+	jsn['driver'] = eles[5].innerHTML;
+	
+	getData('','',"UPDATE t_meeting_tbl set dispatch_details = '"+JSON.stringify(jsn)+"'  where id =" + id,0,0,121);
 }
 </script>
 
