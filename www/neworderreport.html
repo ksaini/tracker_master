@@ -20,13 +20,13 @@
 <script src="./assets/js/bootstrap-datetimepicker.min.js"></script>
 <style>
 .product {
-font-size:10px;
+font-size:9px;
 font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
 color: rgb(72, 72, 72) !important;
 letter-spacing: 0.5px !important;
 }
 .code {
-font-size:11px;
+font-size:9px;
 font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
 color: #008489;
 letter-spacing: 0.5px !important;
@@ -189,32 +189,31 @@ function populateByDealer(data){
 			var did = data[i]['did'] ;
 			
 			if(data[i]['ordr'].trim().length > 2 && data[i]['status']== 0){flg=1;
-			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' ><div class='row' style='margin-left:4px;margin-right:4px;'>";
-			msg += "<div class='col-xs-2 code' name='pcode' >" + formatDateY(data[i]['mdate']) + "</div>";
-			
-			msg += "<div class='col-xs-3 code' name='pcode' >" + data[i]['firmname'] + "</div>";
-			msg += "<div class='col-xs-1 code' name='pcode' ><small>QTY</small></div>";
-			msg += "<div class='col-xs-2 code' name='pcode' >Prod Mapping</div>";
-			msg += "<div class='col-xs-2 code' name='pcode' ></div>";
-			msg += "<div class='col-xs-2 code' name='pcode' >"+data[i]['name']+"</div>";
+			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' >";
+			msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+			msg += "<div class='col-xs-5 product' name='pcode' >FIRM : " + data[i]['firmname'] + "</div>";
+			msg += "<div class='col-xs-5 product' name='pcode' >AGENT : "+data[i]['name']+"</div>";
+			msg += "<div class='col-xs-2 code' name='pcode' style='text-align:center;' ><button id=sel_"+data[i]['id']+" class='btn btn-warning btn-sm  sel' style='height:15px;padding-bottom:0px;font-size:10px;padding-top:0px;'  onclick='selectOrdr(this)'>Select</button></div>";			
 			msg += "</div>";
 			
 			msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
-			msg += "<div class='col-xs-1 product' name='pcode' ><span style='font-size:12px;color:black;'><i id='users' class='fa fa-trash' style='color:#D64541;'></i>&nbsp;&nbsp;<i id='users' class='fa fa-edit' onclick='editOrder("+data[i]['id']+","+JSON.stringify(data[i])+");'></i></span></div>";
-			msg += "<div class='col-xs-5 product' name='pcode' >"+displayOrdr(JSON.parse(data[i]['ordr']))+"</div>";
+			msg += "<div class='col-xs-2 code' name='pcode' >" + formatDateY(data[i]['mdate']) + "</div>";
+			
+			msg += "<div class='col-xs-3 code' name='pcode' >Orders</div>";
+			msg += "<div class='col-xs-1 code' name='pcode' ><small>QTY</small></div>";
+			msg += "<div class='col-xs-2 code' name='pcode' >Prod Map</div>";
+			msg += "<div class='col-xs-3 code' name='pcode' ></div>";
+			msg += "<div class='col-xs-1 code' name='pcode' >Stock<br></div>";
+			msg += "</div>";
+			
+			msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+			msg += "<div class='col-xs-1 product' name='pcode' ><span style='font-size:12px;color:black;'>&nbsp;<i id='users' class='fa fa-edit' onclick='editOrder("+data[i]['id']+","+JSON.stringify(data[i])+");'></i></span></div>";
+			msg += "<div class='col-xs-4 product' name='pcode' >"+displayOrdr(JSON.parse(data[i]['ordr']))+"</div>";
 			if(data[i]['ordr_p']!=null && data[i]['ordr_p'].trim().length > 0)
-				msg += "<div class='col-xs-4 product' name='pcode' >"+displayOrdr(JSON.parse(data[i]['ordr_p']),1)+"</div>";
+				msg += "<div class='col-xs-7 product' name='pcode' >"+displayOrdr(JSON.parse(data[i]['ordr_p']),1)+"</div>";
 			else
-				msg += "<div class='col-xs-4 product' name='pcode' ></div>";
-			msg += "<div class='col-xs-2 product' name='pcode' ><button id=sel_"+data[i]['id']+" class='btn btn-warning btn-sm  sel' style='height:25px;padding-bottom:10px;font-size:12px;'  onclick='selectOrdr(this)'>Select</button><br><br></span></div>";
+				msg += "<div class='col-xs-7 product' name='pcode' ></div>";
 			
-			//msg += "<span class='text-muted col-xs-9' style='font-size:10px;'><strong class='primary-font' style='font-size:10px;padding-bottom:8px;text-transform: uppercase;'>"+ data[i]['firmname'] +  "</strong><span class='pull-right'>Stock</span><span class='pull-right'>Ordr&nbsp;&nbsp;</span>";
-			
-			//msg += "<br>" + displayOrdr(JSON.parse(data[i]['ordr'])) + "|" + displayOrdr(JSON.parse(data[i]['ordr_p']),1) + "</span>" ;
-			
-			//msg +=  "<span class='chat-img text-muted pull-right text-muted col-xs-3' style='padding-right:10px;padding-left:10px;font-size:10px;' >"+data[i]['name']+"<br>";
-			
-		//	msg += '<button id=sel_'+data[i]['id']+' class="btn btn-warning btn-sm  sel" style="height:25px;padding-bottom:10px;font-size:12px;"  onclick="selectOrdr(this)">Select</button>'+'<br><br></span>';
 			
 			msg += "</div></li>";
 			}
@@ -235,13 +234,32 @@ function populateByDealer(data){
  function displayOrdr(data,f){
 	var ordr = "<span>";
 	for (var i = 0; i < data.length; i++) {
-		
-			ordr += data[i]["item"] ;
-			if(f!=1){
-			//ordr += "<b class='pull-right stock stock1' style='padding-right:5px;color:#3e8f3e;'>" + getStock(data[i]["item"]) + "</b>"; //stock
-			ordr += "<b class='pull-right ordr' >" + data[i]["qty"] + "</b>"; //ordr
+			if(f==1){
+				ordr += "<b class='pull-right stock stock1' style='padding-right:5px;color:#3e8f3e;'>" + getStock(data[i]["item"]) + "</b>"; //stock
+				ordr += data[i]["item"] ;
 			}
-		
+			else if(f==2)// show both order and stock
+			{
+				ordr += data[i]["item"] ;
+				
+			}
+			else if(f==3)// show both order and stock
+			{
+				
+				ordr += "<b class='pull-right stock stock1' style='padding-right:5px;color:#3e8f3e;'>" + getStock(data[i]["item"]) + "</b>"; //stock
+				ordr += "<b class='pull-right ordr' >" + data[i]["qty"] + "</b>"; //ordr
+			}
+			else if(f==4)// show both order and stock
+			{
+				ordr += "<b class=' ordr' >" + data[i]["qty"] + "</b>"; //ordr
+				
+			}
+			else{
+			ordr += data[i]["item"] ;
+			
+			ordr += "<b class='pull-right ordr' >" + data[i]["qty"] + "</b>"; //ordr
+			
+		    }
 		ordr +="<br>";
 	}	
 	ordr += "</span>";
@@ -395,17 +413,37 @@ function populateProcessing(data){
 			var did = data[i]['did'] ;
 			
 			if(data[i]['ordr'].trim().length > 2){
+				msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' >";
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+				msg += "<div class='col-xs-2 product' >" + formatDateY(data[i]['mdate']) + "</div>";
+				msg += "<div class='col-xs-5 product' >" + data[i]['firmname'] + "</div>";
+				msg += "<div class='col-xs-1 product' ></div>";
+				msg += "<div class='col-xs-1 product' >Order</div>";
+				msg += "<div class='col-xs-3 product' >Stock</div>";
+				msg += "</div>";
+				
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+				msg += "<div class='col-xs-2 product' ><i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
+				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</div>";
+				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),3) + "</div>";
+				msg += "<div class='col-xs-2 product' ><button id='"+data[i]['id']+ "' class='btn btn-warning btn-sm  allocate' style='height:15px;padding-bottom:0px;padding-top:0px;font-size:10px;'  onclick=''>Allocate</button></div>";
+				msg += "</div>";
+				
+				msg += "</li>";
+			
+			/*
 			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' ><span class='chat-img pull-left' style='font-size:14px;color:green;'>";
 			msg += formatDateY(data[i]['mdate']) + "<br><span style='font-size:12px;color:black;'>&nbsp;<i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></span>";
 			
 			msg += "<div class='chat-body clearfix'>";
 			msg += "<span class='text-muted col-xs-9' style='font-size:10px;'><strong class='primary-font' style='font-size:10px;padding-bottom:8px;text-transform: uppercase;'>"+ data[i]['firmname'] + "</strong><span class='pull-right'>Stock</span><span class='pull-right'>Ordr&nbsp;&nbsp;</span>";
 			
-			msg += "<br>" + displayOrdr(JSON.parse(data[i]['ordr'])) + "</span>" ;
+			msg += "<br>" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</span>" ;
 			
 			msg +=  "<span class='chat-img text-muted pull-right text-muted col-xs-3' style='padding-right:10px;padding-left:10px;font-size:14px;' >"+'<br><button id="'+data[i]['id']+'" class="btn btn-warning btn-sm  allocate" style="height:25px;padding-bottom:10px;font-size:12px;"  onclick="">Allocate</button>'+"<br><br></span>";
 			
 			msg += "</div></li>";
+			*/
 			}
 			
 		}
@@ -447,8 +485,8 @@ function allocateStock(id){
 		var data = JSON.parse(localStorage["underprocess_data"]);
 		populateProcessing(data);
 		
-		document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.remove("ordr");
-		document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.add("markallocate");
+		//document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.remove("ordr");
+		//document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.add("markallocate");
 		document.getElementById("m_"+id).style.backgroundColor = "#ECF0F1";
 		
 		allocate_id.push(id);
@@ -544,16 +582,24 @@ function rsvdOrders(data){
 			var did = data[i]['did'] ;
 			
 			if(data[i]['ordr'].trim().length > 2){
-			msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' ><span class='chat-img pull-left' style='font-size:14px;color:green;'>";
-			msg += formatDateY(data[i]['mdate']) + "<br><span style='font-size:12px;color:black;'>&nbsp;<i id='back1_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></span>";
+				msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' >";
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+				msg += "<div class='col-xs-2 product' >" + formatDateY(data[i]['mdate']) + "</div>";
+				msg += "<div class='col-xs-6 product' >" + data[i]['firmname'] + "</div>";
+				msg += "<div class='col-xs-2 product' >Order</div>";
+				msg += "<div class='col-xs-2 product' ></div>";
+				
+				msg += "</div>";
+				
+				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+				msg += "<div class='col-xs-2 product' ><i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
+				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</div>";
+				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),4) + "</div>";
+				msg += "<div class='col-xs-2 product' ><button id='dispatch_"+data[i]['id']+"' class='btn btn-sm pull-right' onclick='dispatch(this);'>Dispatch</button></div>";
+				msg += "</div>";
+				
+				msg += "</li>";
 			
-			msg += "<div class='chat-body clearfix'>";
-			msg += "<span class='text-muted col-xs-8' style='font-size:10px;margin-right: 10px'><strong class='primary-font' style='font-size:10px;padding-bottom:8px;text-transform: uppercase;'>"+ data[i]['firmname'] + "</strong><span class='pull-right'>Order&nbsp;&nbsp;</span>";
-			
-			msg += "<br>" + displayOrdr1(JSON.parse(data[i]['ordr'])) + "</span>" ;
-			msg += "&nbsp;&nbsp;<span class='text-muted col-xs-3'><button id='dispatch_"+data[i]['id']+"' class='btn btn-sm pull-right' onclick='dispatch(this);'>Dispatch</button></span>";
-			
-			msg += "</div></li>";
 			}
 			
 		}

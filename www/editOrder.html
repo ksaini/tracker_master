@@ -41,7 +41,7 @@ letter-spacing: 0.5px !important;
 	color: #484848 !important;
 	border-color: #D35400;
 	color: #D35400;
-	 width:95%;
+	 width:47%;
 }
 	</style>
 	<script> var c=0;</script>
@@ -86,6 +86,7 @@ letter-spacing: 0.5px !important;
 	</div>
 </div>	
 <div class="panel-footer stickyfooter icon-bar" id="panel-footer">
+				 <button class='btn btn-sm order' onclick='window.location.href = "neworderreport.html";'>Back</button>
                  <button class='btn btn-sm order' onclick='mapProduct();'>Save</button>
 			</div>
 </div>
@@ -141,16 +142,21 @@ function mapProduct(){
 	var pcode = document.getElementsByName('pcode');
 	var qty = document.getElementsByName('qty');
 	var pmap = document.getElementsByName('product');
-	var ordr = [];
+	var ordr_p = [];
+	var ordr = []
 	
 	for(var i=0; i < pcode.length;i++){
-		var jsonData = {};	
-		//jsonData['item'] = pcode[i].innerHTML;
-		jsonData['item'] = pmap[i].value;
-		jsonData['qty'] = qty[i].innerHTML;
+		var jsonData_p = {};
+        var	jsonData = {};	
+		jsonData['item'] = pcode[i].innerHTML.trim();
+		jsonData_p['item'] = pmap[i].value;
+		jsonData_p['qty'] = qty[i].innerHTML.trim();
+		jsonData['qty'] = qty[i].innerHTML.trim();
+		
+		ordr_p.push(jsonData_p);
 		ordr.push(jsonData);
 	}
-	getData('','',"UPDATE t_meeting_tbl set ordr_p = '"+JSON.stringify(ordr)+"' where id =" + getParameterByName('id'),0,0,151);
+	getData('','',"UPDATE t_meeting_tbl set ordr_p = '"+JSON.stringify(ordr_p)+"' , ordr = '"+ JSON.stringify(ordr) +"' where id =" + getParameterByName('id'),0,0,151);
 }	
 
 function custErr(t){
