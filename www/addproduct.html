@@ -241,7 +241,7 @@ letter-spacing: 0.5px !important;
         <span class="icon-bar"></span>                        
       </button>
       <a class="navbar-brand" href="index.html">Home</a>
-	   <p class="navbar-brand pull-right" href="" onclick=addRow();>+</p>
+	   
     </div>
    <!--- <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -260,8 +260,9 @@ letter-spacing: 0.5px !important;
 		<div class="panel panel-default">
                 <div class="panel-heading" id='phead' style='background:#265a88;color:white;text-align:center;padding-top:40px;padding-bottom:5px;'></div>
 				<div class="panel-body">
-                    <ul class="chat" id="chat">
-                                             
+                    <ul class="chat" id="chat"><br><br><br>
+                        <button class='btn btn-sm order' onclick='addProductC()'>Client facing Brands</button>
+						<button class='btn btn-sm order' onclick='addProduct();'>Mgf side Products</button>       
                     </ul>
 				</div>
 			</div>			
@@ -276,12 +277,25 @@ letter-spacing: 0.5px !important;
 <script type="text/javascript" src="js/dataTbl.js"></script>
 
 <script>
+var flag;
+function addProduct(){
+	flag = 1;
+	getData('table1','thead1','SELECT id,name,code,unit,info from t_item_tbl ;',4,1,101);
+}
+function addProductC(){
+	flag = 0;
+	getData('table1','thead1','SELECT id,name,code,unit,info from t_item_tbl_c ;',4,1,102);
+}
+
 function deleteRow(x){
-	//alert(x.cells[0].innerHTML);
+	
 	postData("DELETE from t_item_tbl where id =" + x.cells[0].innerHTML + ";", "Deleted Successfully");
 	location.reload();
 }
 function addRow(){
+
+	var tbl = 't_item_tbl';
+	if(flag ==0) tbl = 't_item_tbl_c';
 	
 	var msg = "";
 	//newCell0.innerHTML = "<button type='button' onclick=addProduct('t_item_tbl','name,code,price,unit',this)>Add</button>";
@@ -289,19 +303,17 @@ function addRow(){
 		msg += "<li id='m_0'   class='left clearfix' style='margin-top:5px;margin-left:-5px;margin-right:-12px; padding-top:10px;'>";
 			msg += "<div class='row'   style='margin-left:4px;margin-right:4px;'>";
 			msg += "<div id='tmp1' class='col-xs-3 code editable' contenteditable=true autofocus >CODE</div>";
-			msg += "<div id='tmp2' class='col-xs-4 product editable' contenteditable=true>Product</div>";
-			msg += "<div id='tmp3' class='col-xs-2 product editable' contenteditable=true>0</div>";
+			msg += "<div id='tmp2' class='col-xs-4 product editable' contenteditable=true>Prd</div>";
 			msg += "<div id='tmp4' class='col-xs-1 product editable' contenteditable=true>Ton</div>";
-			msg += "<button class='col-xs-2 btn btn-sm select' style='padding-top:2px;padding-bottom:2px;' onclick=addProduct('t_item_tbl','code,name,dcode,dname,price,unit',this)>Save</button>";			
+			msg += "<button class='col-xs-2 btn btn-sm select' style='padding-top:2px;padding-bottom:2px;' onclick=addNewProduct('"+ tbl +"','code,name,unit',this)>Save</button>";			
 			msg += "</div></li>";
 			chat = document.getElementById("chat");
 			chat.innerHTML = msg + chat.innerHTML;
 }
 
-function addProduct(tbl,colList,ele){
+function addNewProduct(tbl,colList,ele){
 	var val = "'"+document.getElementById("tmp1").innerHTML + "','" + document.getElementById("tmp2").innerHTML + "'";
-		val = val + "," + val;
-	    val = val + ",'" + document.getElementById("tmp3").innerHTML  + "','" + document.getElementById("tmp4").innerHTML + "'"
+	    val = val + ",'" + document.getElementById("tmp4").innerHTML + "'"
 	var sql = "tbl=" + tbl + "&colList="+colList + "&valList=" + val ;
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
@@ -325,26 +337,20 @@ function addProduct(tbl,colList,ele){
 	//location.reload();
 }
 
-
-</script>
-
-
-<script>
-getData('table1','thead1','SELECT id,name,code,price,unit,info from t_item_tbl ;',4,1,101);
 function custom(data,p){
-	if(p==101)
-		custom1(data);
-	else
-		custom2(data);
-}
-
-function custom(data){
 	var chat = document.getElementById("chat");
 	chat.innerHTML = "";
 		var msg = "";
 		var x = {};
 		var y  = new Array();
 		y.push(x);	
+		
+		if(p==102)
+			msg += "<li class='left clearfix'><button class='btn btn-sm order' onclick='addProduct();'>Mgf side Products</button><button class='btn btn-sm order pull-right' onclick=addRow()>+</button></li>";
+		else	
+			msg += "<li class='left clearfix'><button class='btn btn-sm order' onclick='addProductC()'>Client facing Brands</button><button class='btn btn-sm order pull-right' onclick=addRow()>+</button></li>";
+			
+		
 				
 		for (var i = 0; i < data.length; i++) {
 			var id = data[i]['id'] ;
@@ -354,7 +360,7 @@ function custom(data){
 			msg += "<div class='row' onclick=showPrdDetails("+id+") style='margin-left:4px;margin-right:4px;'>";
 			msg += "<div class='col-xs-3 code' >" + data[i]['code'] + "</div>";
 			msg += "<div class='col-xs-4 product' >" + data[i]['name'] + "</div>";
-			msg += "<div class='col-xs-2 product' >" + data[i]['price'] + "</div>";
+			
 			msg += "<div class='col-xs-1 product' >" + data[i]['unit'] + "</div>";
 			msg += "<div class='col-xs-2 details' style='text-align:center;' ><i class='fa fa-edit' style='font-size:12px;color:red;'></i></div>";
 			//msg += "<div class='col-xs-2 select' id='sel_"+data[i]['id']+"' onclick=selectIt("+data[i]['id']+")>Select</div>";
@@ -469,7 +475,7 @@ function save(id){
 	
 }
 function custom2(data){location.reload();}
-function errHndlr(){location.reload();}
+function errHndlr(){}
 </script>
     
 </html>
