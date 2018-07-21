@@ -397,11 +397,15 @@ function errHndlr(msg,p){
 		document.getElementById("phead").innerHTML = "<b>Reserved Orders</b>";
 		noOrdrMsg();
 		}
+	else if(p==106){
+		document.getElementById("phead").innerHTML = "<b>Under Manufacturing</b>";
+		noOrdrMsg();
+		}	
 	else if(p==110){
-		showDispatch(data);
+		document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
 		noOrdrMsg();
 	}	
-	else if(p==106)
+	else if(p==113)
 		getData('','',"Select * from t_item_tbl;",0,0,111);
 }
 
@@ -580,7 +584,7 @@ function updateStock(id){
 	var sql = "UPDATE t_item_tbl set stock=" + qty + " where code='" + code + "' and name='" + name + "' ;";
 	
 	//alert(sql);
-	getData('','',sql,0,0,106);
+	getData('','',sql,0,0,113);
 
 }
 function highlightIcon(ele)
