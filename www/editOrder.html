@@ -90,6 +90,8 @@ letter-spacing: 0.5px !important;
                  <button class='btn btn-sm order' onclick='mapProduct();'>Save</button>
 			</div>
 </div>
+
+
 </body>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
@@ -101,7 +103,7 @@ letter-spacing: 0.5px !important;
 	var id = getParameterByName('id');
 	document.getElementById('ordrid').innerHTML = "Edit Order : #" + id;
 	
-	var dealer = "<li id='dealer' class='left clearfix' > "+data['firmname']+" </li>"
+	var dealer = "<li id='dealer' class='left clearfix' > "+data['firmname']+"<div id='del' onclick=delordr(); style='width:20%;text-align:right;' class='pull-right'><i class='fa fa-trash' aria-hidden='true' style='color:red;'></i></div></li>"
 	
 	var ordr = JSON.parse(data['ordr']);
 	var msg = displayOrdr(ordr);
@@ -109,7 +111,7 @@ letter-spacing: 0.5px !important;
 	document.getElementById('chat').innerHTML = dealer + msg;
 	showProdProduct();
 	
-	
+		
 function displayOrdr(data){
 	var ordr = "";
 	for (var i = 0; i < data.length; i++) {
@@ -124,17 +126,31 @@ function displayOrdr(data){
 }
 
 function showProdProduct(){
+	// Check if ordr_p key inside has some value.
+	// If it has some value ==> mfg side mapping is already done and should be retained.
+	// If it is empty add product list
+
 	data = JSON.parse(localStorage["stock"]);
 	var opt = "";
+	var data1 = JSON.parse(localStorage["editOrdr"]);
+    var sel = [];	
 	
 	for(var i=0; i < data.length;i++){
+	    
 		var s = data[i]['code'] + "-" + data[i]['name'];
 		opt += "<option value='"+s+"'>" + s + "</option>";
+		
+		if(data1['ordr_p'].trim().length >  2 ){// select correct product
+			var mfg = JSON.parse(data1['ordr_p']);
+			sel[i] = "<option value='"+mfg[i]["item"]+"'>" + mfg[i]["item"] + "</option>" ;
+			
+		}
 	}
+	//opt = sel + opt;
 	
 	var p = document.getElementsByName('product');
 	for(var j =0;j<p.length;j++ )
-		p[j].innerHTML = opt;
+		p[j].innerHTML = sel[j] + opt;
 }
 	
 
@@ -162,6 +178,17 @@ function mapProduct(){
 function custErr(t){
 	//alert(t);
 	window.location.href = "neworderreport.html";
+}
+
+function delordr(){
+	var chat =	document.getElementById('chat');
+	var txt = "<li id='' class='left clearfix' ><div class='product'>Sure you want to delete this Order?</div><br><button class='btn btn-sm order' onclick='delOrdr()'>Yes,Delete it</button><button class='btn btn-sm order' onclick='ignore();'>Cancel</button> </li>";
+	chat.innerHTML = txt + chat.innerHTML;
+}
+function ignore(){window.location.href = "editOrder.html?id="+id;}
+function delOrdr(){
+	var sql = "UPDATE t_meeting_tbl set ordr='', ordr_p='' where id=" + id;
+	getData('','',sql,0,0,151);
 }
 </script>
 
