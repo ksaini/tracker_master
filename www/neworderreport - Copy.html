@@ -99,11 +99,11 @@ letter-spacing: 0.5px !important;
 <div class="panel-footer stickyfooter icon-bar" id="panel-footer">
                  <div class="icon-bar">			
 					<div id="btn-chat" class="" onclick="highlightIcon(this);viewStock()"><i id="btn-chat_i" class="fa fa-area-chart icon-def"><p class="icontitle">STOCK</p></i></div>
-					<div id="btn-back" class="" onclick="highlightIcon(this);showRawOrder(data_raw);"><i id="btn-back_i" class="fa fa-shopping-cart icon-def"><p class="icontitle">RAW</p></i></div>
-					<div id="btn-confirm" class="" onclick="highlightIcon(this);showCNFOrder(data_raw);"><i id="btn-confirm_i" class="fa fa-shopping-cart icon-def cnf" ><p class="icontitle">CNF</p></i></div>
-					<div id="btn-rsvd" class="" onclick="highlightIcon(this);showRSVDOrder(data_raw);"><i id="btn-rsvd_i" class="fa fa-shopping-cart icon-def" style="color:#68C3A3;"><p class="icontitle">RSVD</p></i></div>
-					<div id="btn-mfg" class="" onclick="highlightIcon(this);displayMFG(data_raw);"><i id="btn-mfg_i" class="fa fa-shopping-cart icon-def" style="color:#6BB9F0;"><p class="icontitle">TO MFG</p></i></div>
-					<div id="btn-cpt" class="" onclick="highlightIcon(this);showDispatch(data_dispatched);"><i id="btn-cpt_i" class="fa fa-shopping-cart icon-def" style="color:#777;"><p class="icontitle">COMPLETED</p></i></div>
+					<div id="btn-back" class="" onclick="highlightIcon(this);getVisitReport();"><i id="btn-back_i" class="fa fa-shopping-cart icon-def"><p class="icontitle">RAW</p></i></div>
+					<div id="btn-confirm" class="" onclick="highlightIcon(this);toMfg()"><i id="btn-confirm_i" class="fa fa-shopping-cart icon-def cnf" ><p class="icontitle">CNF</p></i></div>
+					<div id="btn-rsvd" class="" onclick="highlightIcon(this);rsvd();"><i id="btn-rsvd_i" class="fa fa-shopping-cart icon-def" style="color:#68C3A3;"><p class="icontitle">RSVD</p></i></div>
+					<div id="btn-mfg" class="" onclick="highlightIcon(this);showMFG();"><i id="btn-mfg_i" class="fa fa-shopping-cart icon-def" style="color:#6BB9F0;"><p class="icontitle">TO MFG</p></i></div>
+					<div id="btn-cpt" class="" onclick="highlightIcon(this);dispatched();"><i id="btn-cpt_i" class="fa fa-shopping-cart icon-def" style="color:#777;"><p class="icontitle">COMPLETED</p></i></div>
 				</div>
 			</div>
 </div>
@@ -114,101 +114,57 @@ letter-spacing: 0.5px !important;
 
 
 <script>
-	var data_stock = {};
-	var data_raw = {};
-	var data_dispatched = {};
-	// temp stock variable. Once allocation is saved this will replace data_stock
-	var initial_stock = {}; 
 	
+	localStorage.removeItem("underprocess_data");
 	
 	var list_for_prsng = [];
 	var allocate_id = []; // holds ids of allocated orders
 	
 	document.getElementById("chat").innerHTML = "";
-	getRawOrder(150);
-	
-	var list_for_prsng = []; 
-	var allocate_id = []; // holds ids of allocated orders
-	
-	document.getElementById("chat").innerHTML = "";
-	
+	getVisitReport();
 	var stock = [];
 	var ordr = {};
 	var ordr_history = {};
+	getData('','',"Select * from t_item_tbl;",0,0,101);
 	
+	function getVisitReport(){
 	
-	function getRawOrder(p){
-	
-		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id  order by m.mdate desc ;",0,0,p);
-	}
-	function getStockData(p){
-		getData('','',"Select * from t_item_tbl;",0,0,p);
-	}
-	
-	function getDispatchedOrder(p){
-		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name,  m.cnf_dt,m.rsvd_dt,m.dispatch_dt,m.dispatch_details from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,p);
+		document.getElementById("chat").innerHTML = "";
+		localStorage.setItem("ordr", "");
+		document.getElementById("phead").innerHTML = "<b>Unprocessed Orders</b>";
+		
+		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id  order by m.mdate desc ;",0,0,102);
 	}
 	
 	function custom(data,p){
-		if(p==150){
-			data_raw = data;
-			getStockData(151);
-			flag_raw = 0;
+		if(p==102){
+			getOH(data);
+			showRawOrder(data);
 			}
-		else if(p==151){
-			data_stock = data;
-			localStorage["stock"] = JSON.stringify(data_stock);
-			showRawOrder(data_raw);
-			getDispatchedOrder(152);
-			flag_stock = 0;
-			}
-		else if(p==152){
-			data_dispatched = data;	
-			getOH(data_raw);
-			
-			flag_dispatched = 0;
-			}		
-		else if(p==103){	
-			data_raw = data;
-			showCNFOrder(data_raw);
-			}
-		else if(p==101) // coming from saving allocation. need to update rawdata and stock
-			{	
-				data_stock = JSON.parse(JSON.stringify(data));
-				getRawOrder(160);
-			}
-		else if(p==160)
-			{
-			data_raw = data;
-			showRSVDOrder(data_raw);
-			}	
+		else if(p==101)	
+			getAllStock(data);
+		else if(p==103)	
+			showCNFOrder(data);
 		else if(p==104)
-			getRawOrder(103);
+			gotoProcessing(data);
 		else if(p==105)
-			showRSVDOrder(data);
+			rsvdOrders(data);
+		else if(p==106)	
+			displayMFG(data);
 		else if(p==110)
 			showDispatch(data);	
 		else if(p==111){
 			getAllStock(data);
 			viewStock();
-		}
-		else if(p==170){
-			data_dispatched = data;
-			showDispatch(data_dispatched);	
-			getAllOrdr(data_raw);// update orders
-			getRawOrder(171);
-			}
-		else if(p==171)
-			data_raw = data;	
-		else if(p==175){
-			data_dispatched = data;
-			showDispatch(data_dispatched);	
-		}	
+		}		
+				
 	}
 	
-	
+	function getAllStock(data){
+		localStorage["stock"] = JSON.stringify(data);
+	}
 	function getStock(id){
-		var st = data_stock;
+		var st = JSON.parse(localStorage["stock"]);
 		for(var i=0;i< st.length; i++){
 		var s = st[i]["code"] + "-" + st[i]["name"];
 			if(s == id)
@@ -216,14 +172,14 @@ letter-spacing: 0.5px !important;
 		}
 		return 0;
 	}
-	
-	function getAllOrdr(data){
-		for (var i = 0; i < data.length; i++) {
-			if(data[i]['ordr_p'].trim().length > 2){
-				ordr[data[i]['id']] = data[i]['ordr_p'];
-			}
+function getAllOrdr(data){
+	for (var i = 0; i < data.length; i++) {
+		if(data[i]['ordr'].trim().length > 2){
+			ordr[data[i]['id']] = data[i]['ordr'];
+			
 		}
 	}
+}
 // get order history
 function getOH(data){
 
@@ -240,9 +196,7 @@ function editOrder(id,data){
 }
 
 function showRawOrder(data){
-	 list_for_prsng = []; //everytime clean old list of selected items	
 	getAllOrdr(data);
-	document.getElementById("phead").innerHTML = "<b>Un-Processed Orders</b><i class='fa fa-save pull-right' onclick='toMfg();' style='    font-size: 18px;padding-right: 3px;'></i>";
 	var chat = document.getElementById("chat");
 	var msg = "";
 	var flg =0;
@@ -416,19 +370,13 @@ function formateDt(dt){
 }
 
 function toMfg(){
-	if(list_for_prsng.toString().length > 0){
-			var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-			getData('','',"UPDATE t_meeting_tbl set status =1 , cnf_dt= '"+now+"' where id in ("+ list_for_prsng.toString() + ");",0,0,104);
-			// refresh data here  104-->getRawOrder(102)
-	}
-	else	
-		showCNFOrder(data_raw);
+    var now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+	getData('','',"UPDATE t_meeting_tbl set status =1 , cnf_dt= '"+now+"' where id in ("+ list_for_prsng.toString() + ");",0,0,104);
+	
 }
 function errHndlr(msg,p){
-	if(p==104){
-		getRawOrder(103);
-		list_for_prsng = [];
-	}
+	if(p==104)
+		gotoProcessing();
 	else if(p==102){
 		noOrdrMsg();
 	}
@@ -436,21 +384,20 @@ function errHndlr(msg,p){
 		showCNFOrder();
 		noOrdrMsg();
 	}
-	else if(p==104)
-		getRawOrder(103);
 	else if(p==105){
 		document.getElementById("phead").innerHTML = "<b>Reserved Orders</b>";
 		noOrdrMsg();
-	}	
+		}
+	else if(p==106){
+		document.getElementById("phead").innerHTML = "<b>Under Manufacturing</b>";
+		noOrdrMsg();
+		}	
 	else if(p==110){
 		document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
 		noOrdrMsg();
 	}	
 	else if(p==113)
 		getData('','',"Select * from t_item_tbl;",0,0,111);
-	else if(p==121){
-		getDispatchedOrder(175);
-	}		
 }
 
 function noOrdrMsg(){
@@ -462,15 +409,23 @@ function noOrdrMsg(){
 		chat.innerHTML = msg;
 }
 
-
+function gotoProcessing(){
+	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=1  order by m.mdate desc ;",0,0,103);
+}
 
 function showCNFOrder(data){
 	document.getElementById("phead").innerHTML = "<b>Under Processing</b><i class='fa fa-save pull-right' onclick='reserveIt();'></i>";
+	//document.getElementById("phead").style.backgroundColor = "#e38d13";
 	
-	if(typeof data == 'undefined'){
+	
+	// store data locally
+	if(typeof data !== 'undefined' && data)
+		localStorage["underprocess_data"] = JSON.stringify(data);
+	else{
 		noOrdrMsg();
 		return;
-	}
+		}
+		
 	
 	var chat = document.getElementById("chat");
 	chat.innerHTML = "";
@@ -479,7 +434,7 @@ function showCNFOrder(data){
 		for (var i = 0; i < data.length; i++) {
 			var did = data[i]['did'] ;
 			
-			if(data[i]['ordr'].trim().length > 2  && data[i]['status']== 1){
+			if(data[i]['ordr'].trim().length > 2){
 				msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' >";
 				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
 				msg += "<div class='col-xs-2 product' >" + formatDateY(data[i]['mdate']) + "</div>";
@@ -491,8 +446,8 @@ function showCNFOrder(data){
 				
 				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
 				msg += "<div class='col-xs-2 product' ><i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
-				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),2) + "</div>";
-				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),3) + "</div>";
+				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</div>";
+				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),3) + "</div>";
 				msg += "<div class='col-xs-2 product' ><button id='"+data[i]['id']+ "' class='btn btn-warning btn-sm  allocate' style='height:15px;padding-bottom:0px;padding-top:0px;font-size:10px;'  onclick=''>Allocate</button></div>";
 				msg += "</div>";
 				
@@ -521,63 +476,48 @@ function showCNFOrder(data){
 }	
 
 var allocate = function() {
-		var id = this.getAttribute("id");
-		//if already selected remove selection
-		if(document.getElementById(id).value == 1){
-			document.getElementById(id).value = 0;
-			showCNFOrder(data_raw);
-		}	
-		else{	
-			allocateStock(id);
-			
-			}
-	};
+    var id = this.getAttribute("id");
+    //document.getElementById(id)
+	allocateStock(id);
+};
+var success = 0 ;
+function allocateStock(id){
 	
-	var success = 0 ;
-	
-	function allocateStock(id){
-		
-		success = 0;
-		initial_stock = JSON.parse(JSON.stringify(data_stock));
-		
-		var odr = JSON.parse(ordr[id]);
-		for (var i=0;i < odr.length; i++){
-			doAllocate(odr[i]["item"].split("-")[0],odr[i]["qty"]);
-		}
-		
-	    if(success == 0){
-			// Temp display CNF screen with updated stock
-			// This stock is not conformed till allocation is saved.
-			// Stock will actually be saved and data_stock will be updated upon save only
-			
-		    var tmp = JSON.parse(JSON.stringify(data_stock));
-			data_stock = JSON.parse(JSON.stringify(initial_stock));
-			showCNFOrder(data_raw);
-			// retain value of initial stock
-			initial_stock = JSON.parse(JSON.stringify(data_stock));
-			data_stock = JSON.parse(JSON.stringify(tmp));
-					
-			document.getElementById("m_"+id).style.backgroundColor = "#ECF0F1";
-			document.getElementById(id).value = 1;
-		
-			allocate_id.push(id);
-			
-		}
+	success = 0;
+	var initial_stock = localStorage["stock"];
+	var odr = JSON.parse(ordr[id]);
+	for (var i=0;i < odr.length; i++){
+		doAllocate(odr[i]["item"].split("-")[0],odr[i]["qty"]);
 	}
-
-	function doAllocate(id,qty){
-		var s = initial_stock;
-		for (var i=0;i < s.length; i++){
 	
-			if(s[i]["code"].trim() == id)
-				if((s[i]["stock"] - qty) > 0)
-					s[i]["stock"] = s[i]["stock"] - qty ;
-				else
-					success =1;	
-		}
-		initial_stock = s;
+	if(success == 0){
+		var data = JSON.parse(localStorage["underprocess_data"]);
+		showCNFOrder(data);
+		
+		//document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.remove("ordr");
+		//document.getElementById("m_"+id).children[1].children[0].children[4].children[1].classList.add("markallocate");
+		document.getElementById("m_"+id).style.backgroundColor = "#ECF0F1";
+		
+		allocate_id.push(id);
+	}else{
+		// In case of all orders do not match stocks roll back stock update
+		localStorage["stock"] = initial_stock;	
 	}
+}
 
+function doAllocate(id,qty){
+	
+	var s = JSON.parse(localStorage["stock"]);
+	for (var i=0;i < s.length; i++){
+	
+		if(s[i]["code"].trim() == id)
+			if((s[i]["stock"] - qty) > 0)
+				s[i]["stock"] = s[i]["stock"] - qty ;
+			else
+				success =1;	
+	}
+	localStorage["stock"] = JSON.stringify(s);
+}
 
 function selectOrdr(ele){
 	 var id = ele.getAttribute("id").replace("sel_","");
@@ -608,7 +548,7 @@ function goback(ele){
 }
 
 function viewStock(){
-	var st = data_stock;
+	var st = JSON.parse(localStorage["stock"]);
 	document.getElementById("phead").innerHTML = "<b>View/Edit Stock</b>";
 	//document.getElementById("phead").style.backgroundColor = "#e38d13";
 	var chat = document.getElementById("chat");
@@ -652,8 +592,10 @@ function highlightIcon(ele)
 	document.getElementById(id).style.backgroundColor  = "#E4F1FE";
 }
 
-
-function showRSVDOrder(data){
+function rsvd(){
+	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=2  order by m.mdate desc ;",0,0,105);
+}
+function rsvdOrders(data){
 	document.getElementById("phead").innerHTML = "<b>Reserved Orders</b>";
 	var chat = document.getElementById("chat");
 	chat.innerHTML = "";
@@ -662,7 +604,7 @@ function showRSVDOrder(data){
 		for (var i = 0; i < data.length; i++) {
 			var did = data[i]['did'] ;
 			
-			if(data[i]['ordr'].trim().length > 2 && data[i]['status']== 2){
+			if(data[i]['ordr'].trim().length > 2){
 				msg += "<li id='m_"+data[i]['id']+"' class='left clearfix' >";
 				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
 				msg += "<div class='col-xs-2 product' >" + formatDateY(data[i]['mdate']) + "</div>";
@@ -673,9 +615,9 @@ function showRSVDOrder(data){
 				msg += "</div>";
 				
 				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
-				msg += "<div class='col-xs-2 product' ><i id='back1_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
-				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),2) + "</div>";
-				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),4) + "</div>";
+				msg += "<div class='col-xs-2 product' ><i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
+				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),2) + "</div>";
+				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr']),4) + "</div>";
 				msg += "<div class='col-xs-2 product' ><button id='dispatch_"+data[i]['id']+"' class='btn btn-sm pull-right' onclick='dispatch(this);'>Dispatch</button></div>";
 				msg += "</div>";
 				
@@ -686,15 +628,6 @@ function showRSVDOrder(data){
 		}
 		chat.innerHTML = msg;
 		
-		// Update bottom icon tray
-	document.getElementById("btn-chat_i").style.backgroundColor  = "#f5f5f5";
-	document.getElementById("btn-back_i").style.backgroundColor  = "#f5f5f5";
-	document.getElementById("btn-confirm_i").style.backgroundColor  = "#f5f5f5";
-	document.getElementById("btn-rsvd_i").style.backgroundColor  = "#E4F1FE";
-	document.getElementById("btn-mfg_i").style.backgroundColor  = "#f5f5f5";
-	document.getElementById("btn-cpt_i").style.backgroundColor  = "#f5f5f5";
-		
-		
 }
 
 // Save allocated orders. This will save :
@@ -704,7 +637,7 @@ function reserveIt(){
 	//alert(localStorage["stock"]);
 	//Use allocate_id for list of ids to be moved to reserved
 	//clear allocate_id post success
-	var sql = "stock=" + JSON.stringify(initial_stock) + "&ids=" + JSON.stringify(allocate_id) + "&opr=CNF2RSVD";
+	var sql = "stock=" + localStorage["stock"] + "&ids=" + JSON.stringify(allocate_id) + "&opr=CNF2RSVD";
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
@@ -714,7 +647,7 @@ function reserveIt(){
 				// get fresh stock
 				setTimeout(getData('','',"Select * from t_item_tbl;",0,0,101), 500);
 				// refresh under processing tally
-				
+				gotoProcessing();
 									
 			} catch (e) {			
 				console.log("Exception::-"+e.toString());
@@ -739,13 +672,13 @@ function unReserveIt(id,opr){
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			try {
-				
+				// get fresh stock
+				setTimeout(getData('','',"Select * from t_item_tbl;",0,0,101), 500);
 				// refresh under processing tally
 				if(opr == "RSV2DISP")
-					getDispatchedOrder(170);
+					getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,110);
 				else
-					setTimeout(getData('','',"Select * from t_item_tbl;",0,0,101), 500); // get fresh stock
-						
+					gotoProcessing();
 									
 			} catch (e) {			
 				console.log("Exception::-"+e.toString());
@@ -759,13 +692,17 @@ function unReserveIt(id,opr){
 		req.send();
 }
 
+// Show what is due to manufacturing/plant/factory
+function showMFG(){
+	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=1  order by m.mdate desc ;",0,0,106);
+}
 function displayMFG(data){
 document.getElementById("phead").innerHTML = "<b>Under Production</b>";
 var products = {};
 
 //loop through all orders and update order list
 for (var i = 0; i < data.length; i++) {
-	var tmp = JSON.parse(data[i]['ordr_p']);
+	var tmp = JSON.parse(data[i]['ordr']);
 	for(var j =0; j < tmp.length; j++){
 		if(isNaN(products[tmp[j]["item"]]) )
 			products[tmp[j]["item"]] = 0;
@@ -800,10 +737,9 @@ function dispatch(ele){
 	unReserveIt(id,"RSV2DISP");
 }
 function dispatched(){
-	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, m.dispatch_details, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status >=10  order by m.mdate desc LIMIT 20 ;",0,0,110);
+	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, m.dispatch_details, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,110);
 }
 function showDispatch(data){
-getOH(data);
 document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
 	var chat = document.getElementById("chat");
 	chat.innerHTML = "";

@@ -32,9 +32,9 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 				if(procFn>100)
 					custom(dataArray,procFn);
 									
-			} catch (e) {			
+			} catch (e) {		
 				console.log("Exception::-"+e.toString());
-				if(procFn>150)
+				if(procFn>250)
 					custErr(req.responseText);
 				else
 					errHndlr(req.responseText,procFn);

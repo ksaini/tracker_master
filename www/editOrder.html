@@ -141,9 +141,10 @@ function showProdProduct(){
 		opt += "<option value='"+s+"'>" + s + "</option>";
 		
 		if(data1['ordr_p'].trim().length >  2 ){// select correct product
+		try{
 			var mfg = JSON.parse(data1['ordr_p']);
 			sel[i] = "<option value='"+mfg[i]["item"]+"'>" + mfg[i]["item"] + "</option>" ;
-			
+			} catch (e) {}
 		}
 	}
 	//opt = sel + opt;
@@ -172,7 +173,7 @@ function mapProduct(){
 		ordr_p.push(jsonData_p);
 		ordr.push(jsonData);
 	}
-	getData('','',"UPDATE t_meeting_tbl set ordr_p = '"+JSON.stringify(ordr_p)+"' , ordr = '"+ JSON.stringify(ordr) +"' where id =" + getParameterByName('id'),0,0,151);
+	getData('','',"UPDATE t_meeting_tbl set ordr_p = '"+JSON.stringify(ordr_p)+"' , ordr = '"+ JSON.stringify(ordr) +"' where id =" + getParameterByName('id'),0,0,251);
 }	
 
 function custErr(t){
