@@ -146,7 +146,7 @@ letter-spacing: 0.5px !important;
 	}
 	
 	function getDispatchedOrder(p){
-		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name,  m.cnf_dt,m.rsvd_dt,m.dispatch_dt,m.dispatch_details from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status=10 order by m.mdate desc LIMIT 20 ;",0,0,p);
+		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, a.name,  m.cnf_dt,m.rsvd_dt,m.dispatch_dt,m.dispatch_details from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status>=10 order by m.mdate desc LIMIT 20 ;",0,0,p);
 	}
 	
 	function custom(data,p){
