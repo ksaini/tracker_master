@@ -464,14 +464,8 @@ function save(id){
 	
 	inf.push(temp_info);	
 	info = JSON.stringify(inf);
-	//alert(info);
-	// Save info to column = 'info' in Product table
-	// Need not to save it as local storage. 
-	// DELETE this line Once you save it to DB
-	//localStorage["info"] = info;
 	
-	//location.reload();
-	getData('table1','thead1','UPDATE t_item_tbl set info=\''+info+'\' where id='+id+' ;',4,1,102);
+	getData('table1','thead1','UPDATE t_item_tbl_c set info=\''+info+'\' where id='+id+' ;',4,1,102);
 	
 }
 function custom2(data){location.reload();}

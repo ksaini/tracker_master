@@ -176,10 +176,11 @@ function mapProduct(){
 	getData('','',"UPDATE t_meeting_tbl set ordr_p = '"+JSON.stringify(ordr_p)+"' , ordr = '"+ JSON.stringify(ordr) +"' where id =" + getParameterByName('id'),0,0,251);
 }	
 
-function custErr(t){
+function errHndlr (t){
 	//alert(t);
 	window.location.href = "neworderreport.html";
 }
+function custErr(t){window.location.href = "neworderreport.html";}
 
 function delordr(){
 	var chat =	document.getElementById('chat');
@@ -188,7 +189,7 @@ function delordr(){
 }
 function ignore(){window.location.href = "editOrder.html?id="+id;}
 function delOrdr(){
-	var sql = "UPDATE t_meeting_tbl set ordr='', ordr_p='' where id=" + id;
+	var sql = "UPDATE t_meeting_tbl set status=-1,  ordr_p='' where id=" + id;
 	getData('','',sql,0,0,151);
 }
 </script>

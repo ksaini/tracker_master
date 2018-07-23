@@ -48,7 +48,7 @@ letter-spacing: 0.5px !important;
 	color: #484848 !important;
 	border-color: #D35400;
 	color: #D35400;
-	width:22%;
+	width:29%;
 	padding-top:2px;
 	padding-bottom:2px;	
 }
@@ -139,7 +139,7 @@ letter-spacing: 0.5px !important;
 	
 	function getRawOrder(p){
 	
-		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id  order by m.mdate desc ;",0,0,p);
+		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status >= 0  order by m.mdate desc ;",0,0,p);
 	}
 	function getStockData(p){
 		getData('','',"Select * from t_item_tbl;",0,0,p);
@@ -189,7 +189,8 @@ letter-spacing: 0.5px !important;
 		else if(p==110)
 			showDispatch(data);	
 		else if(p==111){
-			getAllStock(data);
+			data_stock = data;
+			//getAllStock(data);
 			viewStock();
 		}
 		else if(p==170){
@@ -634,9 +635,22 @@ function updateStock(id){
 	var name = prd[1];
 	var sql = "UPDATE t_item_tbl set stock=" + qty + " where code='" + code + "' and name='" + name + "' ;";
 	
-	//alert(sql);
-	getData('','',sql,0,0,113);
+	var chat =	document.getElementById('chat');
+	var txt = "<li id='xx"+id+"' class='left clearfix' ><div class='product'>You are about to update stock for <b>"+document.getElementById("code_" + id).innerHTML.trim()+"</b> to "+qty+". Continue?</div><br><button class='btn btn-sm order' onclick='upordr("+id+")'>Yes,Update</button>&nbsp;&nbsp;<button class='btn btn-sm order' onclick='viewStock();'>Cancel</button> </li>";
+	chat.innerHTML = txt + chat.innerHTML;
+	
+}
 
+function upordr(id){
+	var qty = document.getElementById("st_" + id).innerHTML.trim();
+	var prd = document.getElementById("code_" + id).innerHTML.trim().split("-");
+	var code = prd[0];
+	var name = prd[1];
+	var sql = "UPDATE t_item_tbl set stock=" + qty + " where code='" + code + "' and name='" + name + "' ;";
+	var parent =	document.getElementById('chat');
+	var child = document.getElementById("xx"+id);
+	parent.removeChild(child);
+	getData('','',sql,0,0,113);
 }
 function highlightIcon(ele)
 {
@@ -797,8 +811,14 @@ var chat = document.getElementById("chat");
 // 2) Not changing stock right now as stock has already been reduced when we reserved it
 function dispatch(ele){
 	var id = ele.getAttribute('id').replace("dispatch_","");
-	unReserveIt(id,"RSV2DISP");
+	var li = document.getElementById("m_" + id).style.backgroundColor = "#f5f5f5";
+	var chat =	document.getElementById('chat');
+	var txt = "<li id='' class='left clearfix' ><div class='product'>You are about to Dispatch selected order, it will be visible to Customer.</div><br><button class='btn btn-sm order' onclick=posxx('"+id+"')>Yes,Dispatch it</button>&nbsp;&nbsp;<button class='btn btn-sm order' onclick=document.getElementById('btn-rsvd').click();>Cancel</button> </li>";
+	chat.innerHTML = txt + chat.innerHTML;
+	
+	//unReserveIt(id,"RSV2DISP");
 }
+function posxx(id){unReserveIt(id,"RSV2DISP");}
 function dispatched(){
 	getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr_p as ordr, m.mdate, m.dispatch_details, a.name from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status >=10  order by m.mdate desc LIMIT 20 ;",0,0,110);
 }
