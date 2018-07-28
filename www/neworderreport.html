@@ -243,7 +243,7 @@ function editOrder(id,data){
 function showRawOrder(data){
 	 list_for_prsng = []; //everytime clean old list of selected items	
 	getAllOrdr(data);
-	document.getElementById("phead").innerHTML = "<b>Un-Processed Orders</b><i class='fa fa-save pull-right' onclick='toMfg();' style='    font-size: 18px;padding-right: 3px;'></i>";
+	document.getElementById("phead").innerHTML = "<b>Un-Processed Orders</b><i class='fa fa-refresh pull-left' onclick='getRawOrder(150);' style='    font-size: 18px;padding-right: 3px;'></i><i class='fa fa-save pull-right' onclick='toMfg();' style='    font-size: 18px;padding-right: 3px;'></i>";
 	var chat = document.getElementById("chat");
 	var msg = "";
 	var flg =0;
@@ -295,7 +295,7 @@ function showRawOrder(data){
 	document.getElementById("btn-cpt_i").style.backgroundColor  = "#f5f5f5";
 
 	// keep pinging every 60 section
-    setTimeout(function(){ getRawOrder(150); }, 60000);	
+    //setTimeout(function(){ getRawOrder(150); }, 60000);	
 }	
  function displayOrdr(data,f){
 	var ordr = "<span>";
@@ -454,7 +454,9 @@ function errHndlr(msg,p){
 		getData('','',"Select * from t_item_tbl;",0,0,111);
 	else if(p==121){
 		getDispatchedOrder(175);
-	}		
+	}
+	else if(p==150)
+		getStockData(151);
 }
 
 function noOrdrMsg(){
