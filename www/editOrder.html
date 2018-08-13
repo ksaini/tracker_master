@@ -117,7 +117,7 @@ function displayOrdr(data){
 	for (var i = 0; i < data.length; i++) {
 		    ordr += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
 			ordr += "<div class='col-xs-4 product' name='pcode' >" + data[i]["item"] + "</div>";
-			ordr += "<div class='col-xs-2 product'  contenteditable=true >" + "<b class=' ordr' name='qty'>" + data[i]["qty"] + "</b></div>"; //ordr
+			ordr += "<div class='col-xs-2  ordr' name='qty'  contenteditable=true >"  + data[i]["qty"] + "</div>"; //ordr
 			ordr += "<div class='col-xs-6 product'  > <select class='form-control ' name='product' style='height:26px;font-size:10px;'></select></div>" //stock
 			ordr +="</div>";
 	}	
