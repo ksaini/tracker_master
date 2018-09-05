@@ -3,6 +3,7 @@ var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
 var base_url = "http://theqalabs.com/track/";
+base_url = "http://greyboxerp.com/track/";
 
 
 function schoolDetails(data){
@@ -31,9 +32,12 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 				if(procFn>100)
 					custom(dataArray,procFn);
 									
-			} catch (e) {			
+			} catch (e) {		
 				console.log("Exception::-"+e.toString());
+<<<<<<< HEAD
 				//errHndlr(req.responseText);
+=======
+>>>>>>> 2efeaa23a7ced4c3fa7d07b0e32403e461c7150d
 				if(procFn>250)
 					custErr(req.responseText);
 				else
