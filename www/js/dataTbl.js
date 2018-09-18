@@ -4,7 +4,7 @@ var address ="Sector 71, Delhi";
 var scn1 = "";
 
 var base_url = "http://theqalabs.com/track/";
-
+base_url = "http://greyboxerp.com/track/";
 
 function schoolDetails(data){
 	schoolname = data[0]['name'];

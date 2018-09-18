@@ -233,11 +233,18 @@
 		
 		function del(t)
 		{
+/*<<<<<<< HEAD
 			var data =  t.parentElement.parentElement.cells[0].innerHTML;
 			var txt = confirm("You are about to DELETE dealer id :" + data);
 			if(txt == true){
 			
 			}
+=======*/
+			var data =  t.parentElement.parentElement.cells[1].innerHTML;
+			var id =  t.parentElement.parentElement.cells[0].innerHTML;
+			confirmAction("<small>You are about to DELETE dealer: <br><u>" + data + "</u></small>",id);
+			
+//>>>>>>> db1486f671252985ee74016f16fb7518edb7f2b9
 		}
 
 </script>
@@ -358,6 +365,7 @@ function save_agent(t){
 	getData('','','update t_dealer_tbl set agentid='+ new_agent +' where did='+d_id,0,0,251);
 }
 
+/*<<<<<<< HEAD
 function confirmAction(msg){
 	if(msg ==1)
 		var msg1 = "'Are you sure you want to change Agent?'";
@@ -369,12 +377,45 @@ function confirmAction(msg){
 }
 
 function doaction(a){ 
+=======*/
+function confirmAction(msg,id){
+	if(msg ==1)
+		var msg1 = "'Are you sure you want to change Agent?'";
+	else if(msg==2)
+		var msg1 = "You are going to update dealer details. Continue?";
+	else 
+	{
+		var msg1 = msg;
+		msg = 3;
+		$('html,body').scrollTop(0);
+	}	
+	document.getElementById('msg').innerHTML = "<div class='content col-md-12 col-xs-12 bg-warning text-danger small text-center' >"+msg1+"<br><br><button class='btn-sm' onclick='doaction("+msg+","+id+")' id='okd'>OK</button>&nbsp;&nbsp;&nbsp;<button class='btn-sm' onclick=custErr();>Cancel</button></div>" ;
+	document.getElementById('msg').style.display = "block";
+}
+
+function doaction(a,id){ 
+	document.getElementById('okd').disabled = true;
+//>>>>>>> db1486f671252985ee74016f16fb7518edb7f2b9
 	if(a==1)
 		save_agent();
 	else if(a==2)
 		savedealer();
+/*<<<<<<< HEAD
 }
 
+=======*/
+	else if(a==3)
+		{
+		getData('','','__!del_dealer_01,' +id+';',0,0,70);
+		//setTimeout(location.reload.bind(location), 2000);
+		}
+}
+
+function errHndlr(m,p){
+	if(p==70)
+		location.reload();
+}
+>>>>>>> db1486f671252985ee74016f16fb7518edb7f2b9
 
 function custom(data){
 	var dhistory ="";
