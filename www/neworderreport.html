@@ -497,11 +497,19 @@ function showCNFOrder(data){
 				
 				msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
 				msg += "<div class='col-xs-2 product' ><i id='back0_"+data[i]['id']+"' class='fa fa fa-rotate-left' onclick=goback(this)></i></span></div>";
-				msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),2) + "</div>";
-				msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),3) + "</div>";
-				msg += "<div class='col-xs-2 product' ><button id='"+data[i]['id']+ "' class='btn btn-warning btn-sm  allocate' style='height:15px;padding-bottom:0px;padding-top:0px;font-size:10px;'  onclick=''>Allocate</button></div>";
-				msg += "</div>";
+				//
+				// try if product mapping is done. If not mark this entry in red.
+				try{
+					msg += "<div class='col-xs-6 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),2) + "</div>";
+					msg += "<div class='col-xs-2 product' >" + displayOrdr(JSON.parse(data[i]['ordr_p']),3) + "</div>";
+					msg += "<div class='col-xs-2 product' ><button id='"+data[i]['id']+ "' class='btn btn-warning btn-sm  allocate' style='height:15px;padding-bottom:0px;padding-top:0px;font-size:10px;'  onclick=''>Allocate</button></div>";
 				
+				} catch( e){
+					msg += "<div class='col-xs-8 product bg-danger' >No Product Mapping. Go back to  Raw State and map orders to product.</div>";
+					msg += "<div class='col-xs-2 product' ></div>";
+				}
+				
+				msg += "</div>";
 				msg += "</li>";
 			
 			}
