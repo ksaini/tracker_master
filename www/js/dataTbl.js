@@ -2,8 +2,8 @@ var dataArray=new Array();
 var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
+
 var base_url = "http://theqalabs.com/track/";
-base_url = "http://greyboxerp.com/track/";
 
 
 function schoolDetails(data){
@@ -32,8 +32,9 @@ function getData(tblId,tblHdrId, q, addRow,deleteRow, procFn) {
 				if(procFn>100)
 					custom(dataArray,procFn);
 									
-			} catch (e) {		
+			} catch (e) {			
 				console.log("Exception::-"+e.toString());
+				//errHndlr(req.responseText);
 				if(procFn>250)
 					custErr(req.responseText);
 				else
