@@ -633,9 +633,9 @@ function viewStock(){
 		var id = st[i]['id'];
 		msg += "<li  class='left clearfix' id='"+id+"' >";
 		msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
-		msg += "<div class='col-xs-7 code' id='code_"+i+"'>" +st[i]["code"] + "-" + st[i]["name"]+ "</div>";
-		msg += "<div class='col-xs-2 ' id='st_"+i+"' contenteditable=true>" +st[i]["stock"]+ "</div>";
-		msg += "<div class='col-xs-3 ' style='text-align:center;'><button class='btn btn-sm ' onclick='updateStock("+id+","+i+");'>Save</button></div>";
+		msg += "<div class='col-xs-9 code' id='code_"+i+"'>" +st[i]["code"] + "-" + st[i]["name"]+ "</div>";
+		msg += "<div class='col-xs-3 ' id='st_"+i+"' >" +st[i]["stock"]+ "</div>";
+		//msg += "<div class='col-xs-3 ' style='text-align:center;'><button class='btn btn-sm ' onclick='updateStock("+id+","+i+");'>Save</button></div>";
 		
 		msg += "</div></li>";
 	}
@@ -807,15 +807,22 @@ var chat = document.getElementById("chat");
 	var msg = "";
 	msg += "<li  class='left clearfix' style='background-color: #fcf8e3;height:40px;padding-top: 10px;margin-top:-12px;margin-left:-12px;margin-right:-12px;'>";
 		msg += "<div class='chat-body clearfix' style='margin-left:10px;'>";
-		msg += "<span class='text-muted ' style='font-size:10px;padding-left:12px;'>Product<span class='pull-right text-muted' style='font-size:10px;'>For Prod/In Stock&nbsp;&nbsp;&nbsp;&nbsp;</span><span class='pull-right'>&nbsp;&nbsp;</span>";
+		//msg += "<span class='text-muted ' style='font-size:10px;padding-left:12px;'>Product<span class='pull-right text-muted' style='font-size:10px;'>For Prod/In Stock&nbsp;&nbsp;&nbsp;&nbsp;</span><span class='pull-right'>&nbsp;&nbsp;</span>";
+		msg += "<span class='text-muted ' style='font-size:10px;padding-left:12px;'>Product<span class='pull-right text-muted' style='font-size:10px;margin-right:20px;'>To Manufacture</span><span class='pull-right'>&nbsp;&nbsp;</span>";
 		msg += "</div></li>";
 	
 	for (var key in products){
-		
+		var tomf = (parseFloat(products[key]) -  parseFloat(getStock(key)));
+		if(tomf > 0){
 		msg += "<li  class='left clearfix' >";
 		msg += "<div class='chat-body clearfix' style='margin-left:10px;'>";
-		msg += "<span class='text-muted ' style='font-size:10px;'>"+key+"<span class='pull-right' style='font-size:12px;'><b>"+products[key]+ "</b>/<span style='color:green;font-size:10px;'>" + getStock(key) +"&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class='pull-right'>&nbsp;&nbsp;</span>";
+		msg += "<span class='text-muted ' style='font-size:10px;'>"+key+"<span class='pull-right' style='font-size:16px;margin-right:20px;color:red;'>"+tomf+"</span><span class='pull-right'>&nbsp;&nbsp;</span>";
 		msg += "</div></li>";
+		}
+		/*msg += "<li  class='left clearfix' >";
+		msg += "<div class='chat-body clearfix' style='margin-left:10px;'>";
+		msg += "<span class='text-muted ' style='font-size:10px;'>"+key+"<span class='pull-right' style='font-size:12px;'><b>"+products[key]+ "</b>/<span style='color:green;font-size:10px;'>"  + getStock(key) +"&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span class='pull-right'>&nbsp;&nbsp;</span>";
+		msg += "</div></li>";*/
 	}
 	chat.innerHTML = msg;
 
