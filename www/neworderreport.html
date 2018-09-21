@@ -633,9 +633,10 @@ function viewStock(){
 		var id = st[i]['id'];
 		msg += "<li  class='left clearfix' id='"+id+"' >";
 		msg += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
-		msg += "<div class='col-xs-9 code' id='code_"+i+"'>" +st[i]["code"] + "-" + st[i]["name"]+ "</div>";
-		msg += "<div class='col-xs-3 ' id='st_"+i+"' >" +st[i]["stock"]+ "</div>";
-		//msg += "<div class='col-xs-3 ' style='text-align:center;'><button class='btn btn-sm ' onclick='updateStock("+id+","+i+");'>Save</button></div>";
+		msg += "<div class='col-xs-6 code' id='code_"+i+"'>" +st[i]["code"] + "-" + st[i]["name"]+ "</div>";
+		msg += "<div class='col-xs-1 ' id='st_"+i+"' style='font-size:10px;'>" +st[i]["stock"]+ "</div>";
+		msg += "<div class='col-xs-3 '  ><input type='number' id='stnew_"+i+"' style='width:80%;font-size:9px;' placeholder='Add to stock'></input></div>";
+		msg += "<div class='col-xs-2 ' style='text-align:center;font-size:10px;'><button class='btn btn-sm ' onclick='updateStock("+id+","+i+");'>Save</button></div>";
 		
 		msg += "</div></li>";
 	}
@@ -643,18 +644,23 @@ function viewStock(){
 }
 function updateStock(sid,id){
 	var qty = document.getElementById("st_" + id).innerHTML.trim();
+	var qtynew = document.getElementById("stnew_" + id).value;
 	var prd = document.getElementById("code_" + id).innerHTML.trim().split("-");
 	var code = prd[0];
 	var name = prd[1];
-		
+	
+	// add to main stock
+	qty = parseFloat(qty) + parseFloat(qtynew);
+	if(qty!=NaN){	
 	var chat =	document.getElementById(sid);
-	var txt = "<li id='xx"+id+"' class='left clearfix' ><div class='product'>You are about to update stock for <b>"+document.getElementById("code_" + id).innerHTML.trim()+"</b> to "+qty+". Continue?</div><br><button class='btn btn-sm order' onclick='upordr("+sid+","+id+")'>Yes,Update</button>&nbsp;&nbsp;<button class='btn btn-sm order' onclick='viewStock();'>Cancel</button> </li>";
+	var txt = "<li id='xx"+id+"' class='left clearfix' ><div class='product'>You are about to update stock for <b>"+document.getElementById("code_" + id).innerHTML.trim()+"</b> to "+qty+". Continue?</div><br><button class='btn btn-sm order' onclick='upordr("+sid+","+id+","+qty+")'>Yes,Update</button>&nbsp;&nbsp;<button class='btn btn-sm order' onclick='viewStock();'>Cancel</button> </li>";
 	chat.innerHTML = txt + chat.innerHTML;
+	}
 	
 }
 
-function upordr(sid,id){
-	var qty = document.getElementById("st_" + id).innerHTML.trim();
+function upordr(sid,id,qty){
+	//var qty = document.getElementById("st_" + id).innerHTML.trim();
 	var prd = document.getElementById("code_" + id).innerHTML.trim().split("-");
 	var code = prd[0];
 	var name = prd[1];
