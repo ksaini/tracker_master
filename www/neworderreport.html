@@ -139,6 +139,7 @@ letter-spacing: 0.5px !important;
 	
 	function getRawOrder(p){
 	
+		//getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status >= 0  order by m.mdate desc ;",0,0,p);
 		getData('','',"SELECT m.id,m.did,d.firmname,m.discussion,m.ordr,m.ordr_p, m.mdate, m.status, a.name, m.cnf_dt,m.rsvd_dt,m.dispatch_dt from t_meeting_tbl m, t_dealer_tbl d, t_agent_tbl a where d.did = m.did and d.agentid = a.id and m.status >= 0  order by m.mdate desc ;",0,0,p);
 	}
 	function getStockData(p){

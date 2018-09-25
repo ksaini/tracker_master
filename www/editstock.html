@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+   
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/ordrReport.css" rel="stylesheet">
+
+<script src="js/moment.min.js"></script>   
+<script src="js/jquery-1.10.2.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<script src="./assets/js/bootstrap-datetimepicker.min.js"></script>
+<style>
+.product {
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.code {
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: #008489;
+letter-spacing: 0.5px !important;
+}
+
+.productval
+{
+border-bottom: 1px solid #BDC3C7;
+border-right: 1px solid #BDC3C7;
+padding-left:5px;
+font-weight:100;
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.order {
+	font-weight: 300 !important;
+	color: #484848 !important;
+	border-color: #D35400;
+	color: #D35400;
+	width:29%;
+	padding-top:2px;
+	padding-bottom:2px;	
+}
+
+.ordrsheet {
+	border-bottom-width: 1px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #9A9A9A;
+    font-weight: 400;
+    padding-bottom: 5px;
+}
+.form-control {
+display: block;
+    width: 100%;
+    height: 24px;
+    padding: 6px 5px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.qty {
+	background-color: #f9eb8c;
+	height:20px;
+	font-size:14px;
+	text-align:center;
+	font-weight: 550;
+}
+</style>
+<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <title>Edit Stock</title>
+</head>
+
+<body >
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom:5px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="index.html">Edit Stock</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="index.html">&nbsp;Home</a></li>
+        <li class="dropdown">
+		  <a href="index.html" onclick="localStorage['eid']='';localStorage.setItem('ordr', '');;document.location='index.html'">&nbsp;&nbsp;Logout</a>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
+<div class="content" id='mainbody'>
+	<br>
+			<div class="panel panel-default">
+                <div class="panel-heading" id='phead' style='background:#265a88;color:white;text-align:center;padding-top:40px;padding-bottom:5px;'><b>Edit Stock</b></div>
+				<div class="panel-body">
+				<div class="row">
+					<div class='col-xs-3 code'></div>
+					<div class='col-xs-6 caption'>Production Sheet</div>
+					<div class='col-xs-3 code'></div>
+				</div>
+				<div class="row">
+					<div class='col-xs-3 ' style="color:green;font-size:20px;text-align:center;" onclick='goleft();'>&lt;</div>
+					<div class='col-xs-6 ' style="color:green;font-size:20px;text-align:center;" id='d1'></div>
+					<div class='col-xs-3 ' style="color:green;font-size:20px;text-align:center;" onclick='goright();'>&gt;</div>	
+				</div><br>
+				<div class="row">
+					<div class='col-xs-9 code' style='font-size:10px;'><select class="form-control"  id='prd' ></select></div>
+					<div class='col-xs-3 ' ><button class='btn btn-sm' style='font-size:10px;' onclick='addProduct();'>Add Product</button></div>
+						
+				</div>	
+                    <ul class="chat" id="chat">
+                        <li  class='left clearfix ordrsheet'>
+							<div class="row">
+								<div class='col-xs-1'><small></small></div>
+								<div class='col-xs-1'><small>ID</small></div>
+								<div class='col-xs-7'><small>Code</small></div>
+								<div class='col-xs-3'><small>Qty</small>	</div>
+							</div>
+						</li>                     
+                    </ul>
+					
+					<div class="row" id='sve' style='display:none;'>
+					<div class='col-xs-3' ></div>
+					<div class='col-xs-3' ><button class='btn btn-sm btn-primary' onclick='saveprod();'>Save</button></div>
+					<div class='col-xs-3' ><button class='btn btn-sm'>Cancel</button></div>
+					<div class='col-xs-3 ' ></div>
+						
+				</div>	
+				</div>
+			</div>
+				
+	</div>
+</div>	
+
+</body>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/dataTbl.js"></script>
+
+
+<script>
+var data_stock = {};
+var d = new Date();
+
+var pdate = getParameterByName("pdate");
+if(pdate!=null && pdate.length > 0)
+	d.setDate(d.getDate()-pdate);
+else
+	pdate = 0;	
+
+var y = d.getFullYear();
+var m = ("0" + (d.getMonth() + 1)).slice(-2);
+var da = ("0" + d.getDate()).slice(-2);
+var full = y + m + da;
+	
+document.getElementById("d1").innerHTML = formatDate(d);
+getDropDownData('prd','select id, concat(code,"-",name) as name from t_item_tbl order by code desc;');
+getData('','','SELECT d.pid, p.code,d.qty from t_stock_delta d, t_item_tbl p where p.id = d.pid and d.st_dt='+full,0,0,111);
+
+function addProduct(){
+	var p = document.getElementById("prd");
+	var val = p.options[p.selectedIndex].text;
+	var txt = "";
+	
+	txt += "<li  class='left clearfix ordrsheet' id='sheet_"+p.value+"'><div class='row'>";
+	txt += "<div class='col-xs-1 code'><i class='fa fa-trash-o' style='font-size:14px;color:red' id='del_"+p.value+"' onclick='delprd("+p.value+")'></i></div>";
+	txt += "<div class='col-xs-1 code'>"+p.value+"</div>";
+	txt += "<div class='col-xs-7 code'>"+val+"</div>";
+	txt += "<div class='col-xs-3 qty' id='val_"+p.value+"' contenteditable=true name='valname'></div>";
+	txt += "</div></li>";
+	
+	document.getElementById("chat").innerHTML += txt;
+	document.getElementById("sve").style.display = "block";
+	
+}
+function delprd(id){
+	var t = document.getElementById("sheet_"+id);
+	t.parentElement.removeChild(t);
+}	
+
+	
+function selectprod(n){
+	var chat = document.getElementById("chat");
+
+	var txt ="";
+	txt += "<li  class='left clearfix'><div class='row' style='margin-left:4px;margin-right:4px;'><div class='col-xs-12 product'>Update Stock for<br></div></div></li>";
+	txt += "<li  class='left clearfix'>";
+	txt += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+	txt += "<div class='col-xs-5 code'>" + data_stock[n]["name"] + "</div>";
+	txt += "<div class='col-xs-4 code'>" + data_stock[n]["code"] + "</div>";
+	txt += "<div class='col-xs-3 code'>" + data_stock[n]["stock"] + "</div>";
+	txt += "</div></li>";
+	
+	txt += "<li  class='left clearfix'><div class='row' style='margin-left:4px;margin-right:4px;font-size'><div class='col-xs-2 product'>&lt;</div>";
+	
+	
+	chat.innerHTML = txt;
+
+}	
+
+function saveprod(){
+	var vals = document.getElementsByName('valname');
+	var delta_stock = {};
+	 for(i = 0;i < vals.length; i++)
+	{
+		//alert(vals[i].id + "-" + document.getElementById(vals[i].id).innerHTML);
+		delta_stock[vals[i].id.replace('val_','')] = document.getElementById(vals[i].id).innerHTML;
+	}
+	
+	//JSON.stringify(delta_stock);
+	
+	// send for saving
+	
+	var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			location.reload();
+		}
+	};
+	base_url = "http://greyboxerp.com/track/";
+	req.open("GET", base_url + "/stock_delta.php?dt="+full+ "&delta=" + JSON.stringify(delta_stock) + "&approved=0", true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send();
+}
+
+function custom(data){
+	var chat = document.getElementById("chat");
+	var txt = "";
+				
+	for (var i = 0; i < data.length; i++) {
+	/*
+		txt += "<li  class='left clearfix' >";
+		txt += "<div class='row' style='margin-left:4px;margin-right:4px;'>";
+		txt += "<div class='col-xs-3 code'>" + data[i]["pid"] + "</div>";
+		txt += "<div class='col-xs-5 code'>" + data[i]["code"] + "</div>";
+		txt += "<div class='col-xs-4 code'>" + data[i]["qty"] + "</div>";
+		txt += "</div></li>";
+		*/
+		var pid = data[i]["pid"];
+		txt += "<li  class='left clearfix ordrsheet' id='sheet_"+pid+"'><div class='row'>";
+	txt += "<div class='col-xs-1 code'><i class='fa fa-trash-o' style='font-size:14px;color:red' id='del_"+pid+"' onclick='delprd("+data[i]["code"]+")'></i></div>";
+	txt += "<div class='col-xs-1 code'>"+pid+"</div>";
+	txt += "<div class='col-xs-7 code'>"+data[i]["code"]+"</div>";
+	txt += "<div class='col-xs-3 qty' id='val_"+data[i]["qty"]+"' contenteditable=true name='valname'>"+data[i]["qty"]+"</div>";
+	txt += "</div></li>";
+	
+	
+	}
+	document.getElementById("chat").innerHTML += txt;
+	document.getElementById("sve").style.display = "block";
+}
+
+function goleft(){
+	pdate++;
+	window.location.href = "editstock.html?pdate="+pdate;
+}
+function goright(){
+	pdate--;
+	window.location.href = "editstock.html?pdate="+pdate;
+}
+</script>
+</html>
