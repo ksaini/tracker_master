@@ -234,14 +234,14 @@ function saveprod(){
 	
 	// send for saving
 	
-	var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
+	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			location.reload();
 		}
 	};
-	base_url = "http://greyboxerp.com/track/";
+	//base_url = "http://greyboxerp.com/track/";
 	req.open("GET", base_url + "/stock_delta.php?dt="+full+ "&delta=" + JSON.stringify(delta_stock) + "&approved=0", true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	req.send();

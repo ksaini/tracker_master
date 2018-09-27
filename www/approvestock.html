@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+   
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/ordrReport.css" rel="stylesheet">
+
+<script src="js/moment.min.js"></script>   
+<script src="js/jquery-1.10.2.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<script src="./assets/js/bootstrap-datetimepicker.min.js"></script>
+<style>
+.product {
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.code {
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: #008489;
+letter-spacing: 0.5px !important;
+}
+
+.productval
+{
+border-bottom: 1px solid #BDC3C7;
+border-right: 1px solid #BDC3C7;
+padding-left:5px;
+font-weight:100;
+font-size:9px;
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+color: rgb(72, 72, 72) !important;
+letter-spacing: 0.5px !important;
+}
+.order {
+	font-weight: 300 !important;
+	color: #484848 !important;
+	border-color: #D35400;
+	color: #D35400;
+	width:29%;
+	padding-top:2px;
+	padding-bottom:2px;	
+}
+
+.ordrsheet {
+	border-bottom-width: 1px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #9A9A9A;
+    font-weight: 400;
+    padding-bottom: 5px;
+}
+.form-control {
+display: block;
+    width: 100%;
+    height: 24px;
+    padding: 6px 5px;
+    font-size: 10px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.qty {
+	background-color: #f9eb8c;
+	height:20px;
+	font-size:14px;
+	text-align:center;
+	font-weight: 550;
+}
+.chat li {
+     margin-bottom:0px;
+}	
+</style>
+<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <title>Approve Stock</title>
+</head>
+
+<body >
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom:5px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="index.html">Approve Stock</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="index.html">&nbsp;Home</a></li>
+        <li class="dropdown">
+		  <a href="index.html" onclick="localStorage['eid']='';localStorage.setItem('ordr', '');;document.location='index.html'">&nbsp;&nbsp;Logout</a>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
+<div class="content" id='mainbody'>
+	<br>
+			<div class="panel panel-default">
+                <div class="panel-heading" id='phead' style='background:#265a88;color:white;text-align:center;padding-top:40px;padding-bottom:5px;'><b>Approve Stock</b></div>
+				<div class="panel-body">
+				
+                    <ul class="chat" id="chat">
+                                         Nothing pending approval today!.
+                    </ul>
+				</div>
+			</div>
+				
+	</div>
+</div>	
+
+</body>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/dataTbl.js"></script>
+
+
+<script>
+
+getData('','','SELECT d.pid,d.st_dt, p.code,d.qty from t_stock_delta d, t_item_tbl p where p.id = d.pid and d.approved=0 order by d.st_dt desc ;',0,0,111);
+
+
+
+function custom(data){
+	var chat = document.getElementById("chat");
+	var txt = "";
+	var pid_old =0;			
+	for (var i = 0; i < data.length; i++) {
+	
+		var pid = data[i]["pid"];
+		if(pid_old != data[i]["st_dt"]){
+			txt += "<li  class='left clearfix ordrsheet' style='background-color:#008489;height:25px;margin-right:-5px;margin-left:-5px;margin-top:1px;margin-bottom:0px;'>";
+			txt += "<div class='row' style='color:white;'>";
+			txt	+= "<div class='col-xs-1' onclick=approve("+data[i]["st_dt"]+")><i class='fa fa-check-circle ' style='font-size:14px;color:white'></i></div>";
+			txt += "<div class='col-xs-8'>"	+tokenToDate(data[i]["st_dt"])+"</div>";
+			txt	+= "<div class='col-xs-2' style='color:white;'><small>QTY</small></div>";
+			txt	+= "<div class='col-xs-1' style='color:white;'><i class='fa fa-edit ' style='font-size:14px;color:white' onclick=gotoedit('"+data[i]["st_dt"]+"')></i></div>";
+			txt += "</div></li>";
+			
+			pid_old = data[i]["st_dt"];	
+		}
+		txt += "<li  class='left clearfix ordrsheet' id='sheet_"+pid+"'>";	
+		txt += "<div class='row'>";
+		//txt += "<div class='col-xs-2 code'>"+data[i]["st_dt"]+"</div>";
+		txt += "<div class='col-xs-1 code'><small>"+pid+"</small></div>";
+		txt += "<div class='col-xs-8 code'>"+data[i]["code"]+"</div>";
+		txt += "<div class='col-xs-3 code' id='val_"+data[i]["qty"]+"'  name='valname'>"+data[i]["qty"]+"</div>";
+		txt += "</div></li>";
+	
+	
+	}
+	document.getElementById("chat").innerHTML = txt;
+	
+}
+
+function tokenToDate(dt){
+	var tdt = new Date(dt.substring(0,4),dt.substring(4,6)-1,dt.substring(6,8));
+	return tdt.toDateString();
+}
+
+function gotoedit(frm){
+	var date1 = new Date();
+	var date2 = new Date(tokenToDate(frm));
+	var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+	var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) -1; 
+	
+	window.location.href = "editstock.html?pdate="+diffDays + "&frm=1";
+}
+
+function approve(id){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			location.reload();
+		}
+	};
+	
+	req.open("GET", base_url + "/stock_merge.php?dt="+id, true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send();
+}
+</script>
+</html>
