@@ -916,8 +916,9 @@ document.getElementById("phead").innerHTML = "<b>Dispatched Orders</b>";
 				msg += "<div class='col-xs-4 productval' name='"+name+"' contenteditable=true></div>";
 				msg += "</div>";
 			}
-			msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;'>";
-			msg += "<button id='disp_details"+data[i]['id']+"' class='btn btn-sm pull-right order' onclick='savedd("+data[i]['id']+");'>save</button>";
+			msg += "<div class='row' style='margin-left:4px;margin-right:4px;padding-left:20px;'><br>";
+			msg += "<button id='disp_sms"+data[i]['id']+"' class='btn btn-sm pull-left order' style='font-size:10px;' onclick='dispatchSMS("+data[i]['id']+","+did+");'>Send SMS</button>";
+			msg += "<button id='disp_details"+data[i]['id']+"' class='btn btn-sm pull-right order' style='font-size:10px;' onclick='savedd("+data[i]['id']+");'>save</button>";
 			msg += "</div>";
 			
 			msg += "</li>";
@@ -955,6 +956,25 @@ function savedd(id){
 	jsn['driver'] = eles[5].innerHTML;
 	
 	getData('','',"UPDATE t_meeting_tbl set dispatch_details = '"+JSON.stringify(jsn)+"'  where id =" + id,0,0,121);
+}
+
+function dispatchSMS(id,did){
+document.getElementById("disp_sms"+id).disabled = true;
+var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			try {
+				document.getElementById("disp_sms"+id).disabled = false;		
+			} catch (e) {			
+				console.log("Exception::-"+e.toString());
+			}
+		}
+	};
+	//alert(sql);
+	req.open("GET", base_url + "/dispatchSMS.php?id=" + id + "&did=" + did , true);
+	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	//req.send();
+
 }
 </script>
 
